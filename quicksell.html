@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeekBit | Instant Otkup</title>
+    <meta name="description" content="Treba ti hitan novac? Nudimo instant otkup tvojih PC komponenti isplatom na ruke!">
+    <meta property="og:title" content="GeekBit | Instant Otkup Hardvera">
+    <meta property="og:description" content="Prodaj svoje komponente danas! Brza procena i isplata odmah.">
+    <meta property="og:image" content="https://marketplace.geekbit.tech/assets/img/neon-logo1.png">
+    <meta property="og:url" content="https://marketplace.geekbit.tech/quicksell.html">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="css/style.css?v=2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/neon-logo2.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <meta property="og:title" content="GeekBit | Najveća Hardver Berza">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+    .cyber-card {
+        background: rgba(12, 12, 12, 0.85); /* Tamna providna pozadina */
+        border: 1px solid #333;
+        border-top: 2px solid var(--accent); /* Zelena linija gore */
+        border-bottom: 2px solid var(--accent); /* Zelena linija dole */
+        backdrop-filter: blur(10px); /* Zamućenje pozadine */
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.1); /* Blagi sjaj */
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Ukrasna mreža u pozadini */
+    .cyber-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: repeating-linear-gradient(90deg, transparent 0, transparent 19px, rgba(0, 255, 136, 0.03) 20px),
+                    repeating-linear-gradient(0deg, transparent 0, transparent 19px, rgba(0, 255, 136, 0.03) 20px);
+        pointer-events: none;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Dve kolone */
+        gap: 20px;
+    }
+
+    /* Cyber input polja */
+    .cyber-input-group label {
+        display: block;
+        color: #888;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+        font-family: 'Rajdhani', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .cyber-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.03);
+        border: none;
+        border-bottom: 2px solid #333;
+        padding: 12px 15px;
+        color: #fff;
+        font-family: 'Roboto', sans-serif;
+        transition: 0.3s;
+        border-radius: 4px 4px 0 0;
+    }
+
+    .cyber-input:focus {
+        outline: none;
+        background: rgba(0, 255, 136, 0.05);
+        border-bottom-color: var(--accent); /* Svetli zeleno kad klikneš */
+        box-shadow: 0 10px 20px -10px rgba(0, 255, 136, 0.2);
+    }
+
+    /* File upload dugme */
+    .cyber-file-upload {
+        border: 1px dashed #444;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.3s;
+        color: #888;
+    }
+    .cyber-file-upload:hover {
+        border-color: var(--accent);
+        color: #fff;
+    }
+
+    /* Full width na mobilnom */
+    @media (max-width: 768px) {
+        .form-grid { grid-template-columns: 1fr; }
+    }
+</style>
+<meta property="og:description" content="Kupi i prodaj PC komponente brzo i sigurno. Instant otkup i procena.">
+<meta property="og:image" content="assets/img/neon-logo1.png"> <meta property="og:url" content="https://tvojsajt.com">
+<meta name="theme-color" content="#00ff88"> ```
+
+
+</head>
+<body class="quicksell-page">
+
+    <nav>
+        <a href="index.html" class="logo-container">
+            <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+            <span class="service-name">MARKETPLACE</span>
+        </a>
+        
+    <ul class="nav-links">
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="komponente.html">BERZA</a></li>
+            <li><a href="quicksell.html">Instant Otkup</a></li>
+            <li><a href="kalkulator.html">KALKULATOR</a></li>
+            <li><a href="#" onclick="idiNaPostavljanjeOglasa(event)">Prodaj</a></li>
+
+            <li id="admin-btn" style="display: none;">
+                <a href="admin.html" style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 10px; border-radius: 4px;">ADMIN</a>
+            </li>
+
+            <li id="my-ads-btn" style="display: none;">
+                <a href="profil.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">
+                    <i class="fas fa-layer-group"></i> MOJI OGLASI
+                </a>
+            </li>
+
+            <li>
+                <a href="korpa.html" style="color:var(--accent); position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.1rem;"></i> 
+                    <span id="cart-count-badge" style="
+                        background: var(--error); 
+                        color: white; 
+                        border-radius: 50%; 
+                        padding: 2px 5px; 
+                        font-size: 0.7rem; 
+                        position: absolute; 
+                        top: -8px; 
+                        right: -10px; 
+                        display: none;">0</span>
+                </a>
+            </li>
+
+            <li class="login-item" style="margin-left: 10px;">
+                
+                <a href="#" id="login-btn" onclick="prijaviSeGoogle(); return false;">
+                    <i class="fab fa-google"></i> PRIJAVI SE
+                </a>
+
+                <a href="profil.html" id="user-profile-btn" style="display: none; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 15px; border-radius: 20px; border: 1px solid #333;">
+                    <img id="user-avatar" src="assets/img/neon-logo1.png" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                    <span id="user-name" style="font-size: 0.9rem; color: #fff;"></span>
+                </a>
+
+                <a href="#" id="logout-btn" onclick="odjaviSe(); return false;" style="display: none; color: #666; margin-left: 5px; font-size: 1.1rem;" title="Odjavi se">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <div class="otkup-wrapper">
+        
+        <div class="otkup-header">
+            <h1 style="font-family: 'Nulshock', sans-serif;">ISPLATA U ROKU OD 24H</h1>
+            <p>Bez cenkanja, bez čekanja kupaca. Mi procenjujemo i otkupljujemo vaš hardver direktno.</p>
+        </div>
+
+       <div class="cyber-card">
+    <h2 style="font-family: 'Nulshock'; color: #fff; text-align: center; margin-bottom: 30px;">
+        <span style="color: var(--accent);">//</span> UNOS PODATAKA
+    </h2>
+
+    <form id="otkup-form" style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <div class="form-grid">
+            <div class="cyber-input-group">
+                <label>Ime i Prezime</label>
+                <input type="text" id="otkup-ime" class="cyber-input" placeholder="UNESITE IME..." required>
+            </div>
+            <div class="cyber-input-group">
+                <label>Telefon (Viber/WA)</label>
+                <input type="text" id="otkup-telefon" class="cyber-input" placeholder="06X..." required>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <div class="cyber-input-group">
+                <label>Komponenta (Naziv)</label>
+                <input type="text" id="otkup-naziv" class="cyber-input" placeholder="NPR. RTX 3060 TI" required>
+            </div>
+            <div class="cyber-input-group">
+                <label>Očekivana Cena (€)</label>
+                <input type="number" id="otkup-cena" class="cyber-input" placeholder="0" required>
+            </div>
+        </div>
+
+        <div class="cyber-input-group">
+            <label>Stanje i Opis</label>
+            <textarea id="otkup-opis" class="cyber-input" rows="3" placeholder="Koliko je staro, ima li garanciju..." required></textarea>
+        </div>
+
+        <div class="cyber-input-group">
+            <label>Slika (Opciono)</label>
+            <input type="file" id="otkup-slika" class="cyber-input cyber-file-upload" accept="image/*">
+        </div>
+
+        <button type="submit" class="cta-button" style="width: 100%; margin-top: 10px; font-family: 'Nulshock'; letter-spacing: 2px;">
+            POŠALJI NA PROCENU <i class="fas fa-bolt" style="color: black;"></i>
+        </button>
+    </form>
+</div>
+        <div class="process-steps">
+            <div class="step-card">
+                <i class="fas fa-file-invoice"></i>
+                <h4>1. ZAHTEV</h4>
+                <p>Popunite formu sa detaljima i slikama vaše komponente. Proces traje manje od 2 minuta.</p>
+            </div>
+            <div class="step-card">
+                <i class="fas fa-search-dollar"></i>
+                <h4>2. PROCENA</h4>
+                <p>Naš stručni tim vas kontaktira sa fer ponudom u roku od 24 časa, u slučaju da vaš predmet prodaje bude odabran.</p>
+            </div>
+            <div class="step-card">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h4>3. ISPLATA</h4>
+                <p>Nakon fizičke provere hardvera, novac vam se isplaćuje odmah na ruke ili račun.</p>
+            </div>
+        </div>
+
+    </div>
+
+   <footer>
+        <div class="footer-content">
+            
+            <div class="footer-section about">
+                <a href="#" class="logo-container footer-brand-fix">
+                    <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+                    <span class="service-name">MARKETPLACE</span>
+                </a>
+                <p style="margin-top: 20px;">
+                    Prvi pravi marketplace za hardver entuzijaste. 
+                    Kupuj sigurno, prodaj brzo, upgrade-uj pametno.
+                </p>
+            </div>
+            
+            <div class="footer-section links">
+                <h3>Navigacija</h3>
+                <ul>
+                    <li><a href="index.html">Početna</a></li>
+                    <li><a href="komponente.html">Berza</a></li>
+                    <li><a href="quicksell.html">Instant Otkup</a></li>
+                    <li><a href="#contact">Postavi Oglas</a></li>
+                </ul>
+            </div>
+    
+            <div class="footer-section social">
+                <h3>Zapratite nas</h3>
+                <p>Budite u toku sa najnovijim dropovima i popustima.</p>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://discord.com/"><i class="fab fa-discord"></i></a>
+                    <a href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+    
+        </div>
+    
+    <div class="footer-bottom" style="padding-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
+            <a href="uslovi.pdf" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">Uslovi Korišćenja</a>
+            <span style="color: #444;">|</span>
+            <a href="privatnost.pdf" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">Politika Privatnosti</a>
+        </div>
+        &copy; 2026 GeekBit Marketplace
+    </div>
+    </footer>
+
+    <div id="custom-alert-box" style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#1e1e1e; border:2px solid var(--accent); padding:20px; z-index:9999; text-align:center; box-shadow:0 0 30px rgba(0,0,0,0.8); border-radius:8px; min-width:300px;">
+        <h3 id="alert-title" style="font-family:'Nulshock'; margin-bottom:10px; color:var(--accent);">PORUKA</h3>
+        <p id="alert-message" style="color:#fff; margin-bottom:20px;"></p>
+        <button onclick="zatvoriAlert()" style="background:var(--accent); border:none; padding:8px 20px; cursor:pointer; font-weight:bold;">OK</button>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/main.js?v=2.0" defer></script>
+</body>
+</html>

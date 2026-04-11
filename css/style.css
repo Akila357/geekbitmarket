@@ -1,0 +1,4725 @@
+/* =========================================
+   1. FONTOVI I VARIJABLE
+   ========================================= */
+@font-face {
+    font-family: 'Nulshock';
+    src: url('../assets/fonts/nulshock bd.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --bg-dark: #050505;
+    --bg-card: #121212;
+    --text-main: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent: #00ff88; /* GeekBit Neon Zelena */
+    --accent-glow: rgba(0, 255, 136, 0.5);
+    --error: #ff4d4d;
+}
+
+/* =========================================
+   2. GLOBALNI STILOVI (FIX ZA SKROL) 🛑
+   ========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { 
+    scroll-behavior: smooth; 
+    overflow-x: hidden !important; /* OVO UBIJA HORIZONTALNI SKROL */
+    width: 100%;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden !important; /* DUPLA ZAŠTITA */
+    width: 100%;
+    max-width: 100%; /* Bilo je 100vw, to je pravilo problem! */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0; /* Za svaki slučaj */
+}
+
+/* Scrollbar (Zeleni) - Ovo stilizuje onaj desni, ali donji će nestati zbog overflow-x: hidden */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+h1, h2, h3, h4, h5, h6, .nav-links a, .service-name, button, .submit-btn, .filter-btn, .price, .hero h1, .contact-btn, .modal-title {
+    font-family: 'Nulshock', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+/* Ostatak fajla ostaje isti... */
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+h1, h2, h3, h4, h5, h6, .nav-links a, .service-name, button, .submit-btn, .filter-btn, .price, .hero h1, .contact-btn, .modal-title {
+    font-family: 'Nulshock', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   3. NAVIGACIJA (LOGO LEVO - LINKOVI DESNO)
+   ========================================= */
+nav {
+    display: flex; 
+    align-items: center; /* Centrira po visini */
+    padding: 0 3%; 
+    background: rgba(0, 0, 0, 0.2); 
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
+    height: 90px; transition: all 0.3s ease;
+    
+    /* BITNO: Ovo kaže navigaciji da rasporedi stvari */
+    justify-content: flex-start; 
+}
+
+.logo-container {
+    /* Logo ostaje levo po defaultu */
+    display: flex; align-items: center; gap: 15px; text-decoration: none; flex-shrink: 0; height: 100%;
+}
+
+.nav-links { 
+    list-style: none; 
+    display: flex; 
+    align-items: center; 
+    gap: 25px; /* Razmak između linkova */
+    
+    /* OVO JE MAGIJA KOJA GURA SVE SKROZ DESNO */
+    margin-left: auto; 
+}
+
+/* Opciono: Da napraviš malu granicu između "Prodaj" i "Profila" */
+.login-item {
+    margin-left: 10px;
+    padding-left: 20px;
+    border-left: 1px solid #333; /* Mala siva linija razdvajanja */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* --- MOBILE FIX (Da se ne raspadne na telefonu) --- */
+@media (max-width: 768px) {
+    .nav-links {
+        margin-left: 0; /* Na telefonu poništavamo guranje udesno */
+    }
+}
+
+/* OVO PRAVI ONAJ "GAP" IZMEĐU PRODAJ I PROFILA */
+.push-right {
+    margin-left: auto; /* Gura sve posle ovoga skroz desno */
+}
+
+/* Ako nema admin dugmeta, moramo gurnuti sledeći element (Moji Oglasi ili Login) */
+/* Ovaj selektor kaže: Ako je prvi vidljiv element posle 'Prodaj', gurni ga desno */
+.nav-links li:nth-child(6) { 
+    margin-left: auto; 
+}
+.logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; flex-shrink: 0; height: 100%; }
+nav .logo-img { height: 80px; width: auto; filter: drop-shadow(0 0 15px var(--accent)); transition: all 0.3s ease; object-fit: contain; }
+.service-name { font-size: 1.1rem; color: var(--text-secondary); padding-left: 15px; border-left: 1px solid #444; }
+
+.nav-links { list-style: none; display: flex; align-items: center; gap: 20px; }
+.nav-links a { text-decoration: none; color: var(--text-main); font-size: 0.9rem; font-weight: bold; position: relative; transition: 0.3s; }
+.nav-links a:hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+
+/* Profilno dugme */
+.login-item { display: flex; align-items: center; gap: 15px; }
+#user-profile-btn { display: none; align-items: center; gap: 10px; padding: 5px 15px 5px 5px; background: rgba(0, 255, 136, 0.1); border: 1px solid var(--accent); border-radius: 50px; text-decoration: none; height: 40px; }
+#user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 2px solid #111; }
+#logout-btn { color: #ff4d4d; font-size: 1.2rem; transition: 0.3s; }
+#logout-btn:hover { transform: scale(1.2); }
+
+/* =========================================
+   4. CONTENT FIX
+   ========================================= */
+main { padding-top: 140px; min-height: 80vh; }
+body:has(.hero) main { padding-top: 0; }
+
+/* =========================================
+   5. HERO SEKCIJA (REDIZAJN - CYBERPUNK) ⚡
+   ========================================= */
+
+#hero {
+    position: relative;
+    width: 100%;
+    min-height: 95vh; /* Malo više za bolji efekat */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #050505; /* Duboka crna */
+    overflow: hidden;
+    padding-top: 80px; /* Zbog navigacije */
+}
+
+/* --- POZADINA I ANIMACIJE --- */
+.hero-background {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* 🕸️ Animirana Mreža (Grid) - FIX: Sada se pomera */
+.grid-overlay {
+    position: absolute;
+    width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 255, 136, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center center;
+    mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+    -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+    
+    /* 🔥 Animiramo pomeranje mreže */
+    animation: gridMove 60s linear infinite;
+}
+
+@keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; } /* Pomera se za veličinu jedne kocke */
+}
+
+/* Lebdeće neon kugle */
+.glowing-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.3;
+    animation: floatOrb 15s infinite alternate ease-in-out;
+}
+
+.orb-1 {
+    width: 400px; height: 400px;
+    background: var(--accent); /* Neon zelena */
+    top: -100px; left: 15%;
+}
+
+.orb-2 {
+    width: 500px; height: 500px;
+    background: #008cff; /* Neon plava */
+    bottom: -150px; right: 10%;
+    animation-delay: -7s;
+}
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 80px) scale(1.1); }
+}
+
+/* 🛸 LEBDEĆE IKONICE HARDVERA (CSS deo) */
+.hardware-orbs {
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+}
+
+.floating-icon {
+    position: absolute;
+    color: var(--accent);
+    opacity: 0; /* Počinje nevidljivo, JS pali */
+    font-size: 1.5rem;
+    filter: drop-shadow(0 0 5px var(--accent));
+    animation: floatHardware 20s infinite linear;
+    pointer-events: none; /* Ne smeta klikovima */
+}
+
+@keyframes floatHardware {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.15; } /* Providno ali vidljivo */
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* --- SADRŽAJ --- */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Badge (Aktivno 24/7) */
+.status-badge-hero {
+    background: rgba(0, 255, 136, 0.03);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    display: inline-flex; align-items: center; gap: 8px;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+    text-transform: uppercase;
+}
+
+.pulse-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent);
+    animation: pulse 2s infinite;
+}
+
+/* Naslov */
+.hero-title {
+    font-family: 'Nulshock', sans-serif;
+    font-size: 4.2rem; /* Malo veće */
+    color: #fff;
+    line-height: 1.05;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.neon-text {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+    text-shadow: 0 0 25px rgba(0, 255, 136, 0.2);
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: #ccc;
+    max-width: 650px;
+    margin-bottom: 50px;
+    line-height: 1.7;
+    font-weight: 300;
+}
+
+/* --- 🔘 FIX ZA DUGMAD (Explicitan CSS) --- */
+.hero-buttons {
+    display: flex; 
+    gap: 25px; 
+    margin-bottom: 80px;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Glavno dugme (Istraži ponudu) */
+.hero-buttons .cta-button {
+    display: inline-flex !important; /* Forsiramo flex za ikonicu */
+    align-items: center;
+    gap: 10px;
+    padding: 15px 35px !important; /* Veće */
+    background-color: var(--accent) !important; /* OBAVEZNO ZELENO */
+    color: #000 !important; /* Crni tekst na zeleno */
+    border-radius: 5px !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s ease !important;
+    box-shadow: 0 5px 20px rgba(0, 255, 136, 0.2);
+    margin-top: 0 !important; /* Reset starog margina */
+    text-decoration: none !important;
+}
+
+.hero-buttons .cta-button:hover {
+    background-color: #fff !important; /* Beli hover */
+    color: #000 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+/* Outline dugme (Postavi oglas) */
+.hero-buttons .cta-button-outline {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 35px !important;
+    background-color: transparent !important;
+    color: #fff !important;
+    border: 2px solid rgba(255,255,255,0.2) !important;
+    border-radius: 5px !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s ease !important;
+    margin-top: 0 !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.hero-buttons .cta-button-outline:hover {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    transform: translateY(-3px);
+    background: rgba(0,255,136,0.03) !important;
+}
+
+/* --- STATISTIKA (Glassmorphism Cards) --- */
+.hero-stats-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: rgba(15, 15, 15, 0.5); /* Tamnije */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 18px 28px;
+    border-radius: 12px;
+    display: flex; align-items: center; gap: 15px;
+    min-width: 230px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: rgba(0, 255, 136, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.08);
+}
+
+.stat-icon {
+    font-size: 1.6rem;
+    color: var(--accent);
+    background: rgba(0, 255, 136, 0.08);
+    width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.stat-info { text-align: left; }
+
+.stat-number {
+    display: block;
+    font-family: 'Nulshock', sans-serif;
+    font-size: 1.6rem;
+    color: #fff;
+    line-height: 1.1;
+    font-weight: bold;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: #888;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 3px;
+    display: block;
+}
+
+/* MOBILNI POPRAVKE (Ažurirano) */
+@media (max-width: 768px) {
+    #hero { min-height: 100vh; padding-bottom: 50px; }
+    .hero-title { font-size: 2.6rem; margin-bottom: 20px; }
+    .hero-subtitle { font-size: 1rem; margin-bottom: 40px; }
+    .hero-stats-container { flex-direction: column; width: 100%; gap: 12px; }
+    .stat-card { width: 100%; min-width: auto; }
+    .hero-buttons { flex-direction: column; width: 100%; gap: 15px; margin-bottom: 50px; }
+}
+/* =========================================
+   6. LATEST DROPS (SLAJDER) - FIX ✅
+   ========================================= */
+.latest-drops {
+    position: relative; z-index: 10; background: #0a0a0a; margin-top: 0;
+    padding: 30px 5%; border-bottom: 1px solid #222;
+}
+.latest-drops h2 {
+    text-align: left; font-size: 1.5rem; color: var(--accent); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+}
+.latest-drops h2::before { content: '●'; font-size: 0.8rem; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+/* KONTEJNER ZA SLAJDER - OVO JE FALILO */
+#latest-container {
+    display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; scroll-snap-type: x mandatory;
+}
+#latest-container::-webkit-scrollbar { height: 8px; } /* Horizontalni scrollbar */
+
+#latest-container .product-card {
+    min-width: 220px; scroll-snap-align: start; border: 1px solid #333; background: #111;
+}
+#latest-container .card-image-container { height: 140px; }
+
+/* =========================================
+   7. KARTICE I GRID (BERZA)
+   ========================================= */
+.grid-container { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 15px; padding: 20px 5%; 
+}
+
+.product-card {
+    background: #111; border: 1px solid #333; border-radius: 8px; overflow: hidden;
+    transition: 0.3s; position: relative; font-size: 0.9rem;
+}
+.product-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 5px 20px rgba(0, 255, 136, 0.1); }
+
+.card-image-container { height: 140px; background: #000; position: relative; overflow: hidden; border-bottom: 1px solid #222; }
+.card-image-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+.product-card:hover img { transform: scale(1.05); }
+.category-badge { position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.9); color: var(--accent); padding: 2px 6px; font-size: 0.6rem; border: 1px solid var(--accent); border-radius: 3px; font-weight: bold; }
+
+.product-info { padding: 10px; }
+.product-info h3 { color: #fff; margin-bottom: 5px; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Roboto', sans-serif; font-weight: 500; }
+.details { display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-bottom: 8px; }
+.price { font-size: 1.1rem; color: var(--accent); font-weight: bold; display: block; margin-bottom: 8px; }
+
+.contact-btn {
+    width: 100%; padding: 8px; background: transparent; border: 1px solid var(--accent); color: var(--accent); 
+    font-weight: bold; font-size: 0.8rem; cursor: pointer; transition: 0.3s; border-radius: 4px;
+}
+.contact-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
+
+/* =========================================
+   8. FILTERI I SEARCH 
+   ========================================= */
+.filters-section {
+    padding: 30px 5%;
+    text-align: center;
+    background: #0a0a0a; 
+    border-bottom: 1px solid #222;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    max-width: 600px; margin: 0 auto 30px auto; position: relative;
+}
+
+.search-container input {
+    width: 100%; padding: 15px 25px; border-radius: 50px; border: 1px solid #444;
+    background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 1.1rem; padding-left: 55px;
+    transition: all 0.3s ease; backdrop-filter: blur(5px);
+}
+
+.search-container input:focus {
+    border-color: var(--accent); box-shadow: 0 0 25px rgba(0, 255, 136, 0.15); background: rgba(0, 0, 0, 0.8); outline: none;
+}
+
+.search-container i {
+    position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: #888; font-size: 1.2rem;
+}
+
+.filter-categories { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.03); border: 1px solid #333; color: #ccc; padding: 8px 20px;
+    border-radius: 30px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+    transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-family: 'Nulshock', sans-serif; letter-spacing: 1px;
+}
+
+.filter-btn:hover { border-color: var(--accent); color: #fff; background: rgba(0, 255, 136, 0.05); transform: translateY(-2px); }
+.filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 20px rgba(0, 255, 136, 0.4); }
+
+.tech-tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+.tag-btn { background: transparent; border: 1px solid #444; color: var(--accent); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; font-family: 'Roboto', sans-serif; font-weight: 500; }
+.tag-btn:hover, .tag-btn.active-tag { background: rgba(0, 255, 136, 0.1); border-color: var(--accent); color: #fff; box-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
+
+/* =========================================
+   9. FORMA (FIXED - REDOVI I PORAVNANJE) ✅
+   ========================================= */
+.form-section {
+    padding: 0 5%; display: flex; justify-content: center;
+    margin-top: 50px; margin-bottom: 120px;
+}
+
+.glass-form {
+    width: 100%; max-width: 750px;
+    background: rgba(12, 12, 12, 0.95); backdrop-filter: blur(20px);
+    border: 1px solid #2a2a2a; border-top: 4px solid var(--accent);
+    padding: 50px; border-radius: 15px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 255, 136, 0.05);
+}
+
+.glass-form h2 { color: #fff; text-align: center; margin-bottom: 10px; font-size: 2.2rem; text-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
+.glass-form p { text-align: center; margin-bottom: 30px; color: #888; }
+
+.form-group { margin-bottom: 25px; width: 100%; }
+.form-group label { display: block; margin-bottom: 10px; color: var(--accent); font-size: 0.95rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
+    color: #fff; font-family: 'Roboto', sans-serif; font-size: 1rem; outline: none; transition: all 0.3s ease;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); background: #222; box-shadow: 0 0 15px rgba(0, 255, 136, 0.15); }
+
+.submit-btn {
+    display: block; width: 100%; padding: 18px; background: var(--accent); color: #000; border: none;
+    font-weight: 800; font-size: 1.2rem; cursor: pointer; border-radius: 6px; margin-top: 30px;
+    transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 2px; font-family: 'Nulshock', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+.submit-btn:hover { background: #fff; box-shadow: 0 0 40px var(--accent); transform: translateY(-3px); }
+
+.form-row { display: flex; gap: 20px; }
+.form-row .form-group { flex: 1; margin-bottom: 0; }
+
+/* =========================================
+   10. INSTANT OTKUP (SA POZADINOM) ✅
+   ========================================= */
+body.quicksell-page {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), 
+                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover; background-attachment: fixed;
+}
+
+.otkup-wrapper {
+    padding: 120px 20px 60px 20px; max-width: 800px; margin: 0 auto; text-align: center;
+}
+.otkup-header h1 { font-size: 3rem; color: var(--accent); margin-bottom: 10px; }
+.otkup-header p { font-size: 1.2rem; color: #ccc; margin-bottom: 40px; }
+
+.process-steps { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 50px; }
+.step-card {
+    flex: 1; min-width: 200px; background: rgba(255,255,255,0.05); border: 1px solid #333; padding: 20px;
+    border-radius: 10px; transition: 0.3s;
+}
+.step-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+.step-card i { font-size: 2rem; color: var(--accent); margin-bottom: 15px; }
+
+/* =========================================
+   11. FOOTER (FIXED) ✅
+   ========================================= */
+/* =========================================
+   11. FOOTER (FIXED & COMPACT) ✅
+   ========================================= */
+/* =========================================
+   11. FOOTER (FIXED & PORAVNAT) ✅
+   ========================================= */
+footer {
+    background: #080808; 
+    border-top: 1px solid var(--accent); 
+    padding-top: 50px; 
+    margin-top: auto;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr; /* Prva kolona šira */
+    gap: 40px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px 40px 20px;
+    align-items: start; /* OVO JE KLJUČNO: Sve poravnava na vrh */
+}
+
+/* FIX ZA LOGO U FOOTERU */
+footer .logo-container {
+    height: auto !important; 
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+footer .logo-img {
+    height: 45px !important; /* Fiksna visina */
+    width: auto !important;
+    filter: drop-shadow(0 0 5px var(--accent)) !important;
+    margin-right: 15px;
+    margin-bottom: 0 !important;
+}
+
+footer .service-name {
+    font-size: 1.1rem;
+    color: #fff;
+    padding-left: 15px;
+    border-left: 2px solid var(--accent);
+    line-height: 1;
+}
+
+.footer-section h3 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    position: relative;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+.footer-section h3::after {
+    content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 2px; background: var(--accent);
+}
+
+.footer-section p {
+    color: #888;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-top: 0;
+}
+
+.footer-section.links ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.footer-section.links ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section.links ul li a {
+    color: #aaa;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 0.95rem;
+}
+
+.footer-section.links ul li a:hover {
+    color: var(--accent);
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.social-icons a {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #151515;
+    border: 1px solid #333;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.social-icons a:hover {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    background: #000;
+    text-align: center;
+    padding: 20px;
+    color: #444;
+    font-size: 0.85rem;
+    border-top: 1px solid #111;
+}
+
+/* Mobile Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+    }
+    
+    footer .logo-container {
+        justify-content: center;
+    }
+    
+    .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .social-icons {
+        justify-content: center;
+    }
+}
+/* =========================================
+   12. OSTALO (MODALI, DUGMIĆI)
+   ========================================= */
+.cta-button-outline {
+    display: inline-block; padding: 10px 30px; border: 1px solid var(--accent); color: var(--accent);
+    text-decoration: none; font-weight: bold; margin-top: 30px; transition: 0.3s; border-radius: 4px;
+}
+.cta-button-outline:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
+
+/* Kontakt Modal */
+.contact-modal-content, #custom-alert-box {
+    background: #111; border: 2px solid var(--accent); width: 90%; max-width: 400px; border-radius: 10px; text-align: center;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.2); animation: popIn 0.3s ease; position: relative;
+}
+.contact-modal-content { margin: 15% auto; padding: 30px; }
+#custom-alert-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 30px; }
+@keyframes popIn { from {transform: translate(-50%, -60%); opacity: 0;} to {transform: translate(-50%, -50%); opacity: 1;} }
+.contact-info-row { background: #1a1a1a; padding: 10px; margin-bottom: 10px; border-radius: 6px; display: flex; align-items: center; gap: 15px; }
+.contact-info-row i { color: var(--accent); font-size: 1.2rem; }
+.contact-info-row a, .contact-info-row p { color: #fff !important; font-weight: bold; text-decoration: none; }
+.modal-close-btn { width: 100%; background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px; cursor: pointer; margin-top: 10px; }
+.modal-close-btn:hover { background: var(--accent); color: #000; }
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); }
+.modal-content { margin: auto; display: block; max-width: 90%; max-height: 90vh; top: 50%; transform: translateY(-50%); }
+.close-modal, .close-contact { position: absolute; top: 15px; right: 20px; color: #666; font-size: 30px; cursor: pointer; z-index: 2001; }
+/* --- FIX ZA DUGAČKE EMAILE U MODALU --- */
+
+/* Ovo omogućava da tekst ne izlazi van okvira */
+.contact-info-row > div {
+    flex: 1;           /* Zauzmi sav preostali prostor */
+    min-width: 0;      /* Dozvoli skupljanje ispod veličine sadržaja (ključno za flex) */
+}
+
+/* Ovo lomi dugačke reči/mailove */
+.contact-info-row a, 
+.contact-info-row p, 
+.contact-info-row span {
+    word-wrap: break-word;      /* Stariji browseri */
+    overflow-wrap: break-word;  /* Moderni browseri */
+    word-break: break-all;      /* Silom lomi dugačak string (kao email) */
+    white-space: normal;        /* Dozvoli novi red */
+    display: block;             /* Osigurava da se ponaša kao blok teksta */
+}
+
+/* Mobile */
+.burger { display: none; cursor: pointer; }
+@media (max-width: 768px) {
+    nav { height: 80px; padding: 10px 20px; } nav .logo-img { height: 50px; }
+    .burger { display: block; z-index: 2001; } .burger div { width: 25px; height: 3px; background: #fff; margin: 5px; }
+    .nav-links { position: fixed; right: 0; top: 0; height: 100vh; width: 100%; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(15px); flex-direction: column; justify-content: center; align-items: center; transform: translateX(100%); transition: transform 0.5s ease-in-out; gap: 30px; padding-top: 0; }
+    .nav-active { transform: translateX(0%); }
+    .footer-content { grid-template-columns: 1fr; text-align: center; }
+    .form-row { flex-direction: column; gap: 0; }
+    .hero h1 { font-size: 2.5rem; }
+}
+
+
+
+/* Stil za ceo input polje */
+input[type="file"] {
+    background: #0a0a0a; /* Tamna pozadina */
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 6px;
+    color: #888; /* Boja teksta 'No file selected' */
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+input[type="file"]:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.1);
+}
+
+/* MAGIJA: Stil za samo 'Browse' dugme unutar inputa */
+input[type="file"]::file-selector-button {
+    background: linear-gradient(45deg, #004d29, #00ff88); /* Zeleni gradijent */
+    border: none;
+    color: #000;
+    padding: 8px 20px;
+    margin-right: 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-family: 'Nulshock', sans-serif; /* Tvoj font */
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #fff;
+    box-shadow: 0 0 15px var(--accent);
+    transform: scale(1.05);
+}
+
+
+.submit-btn-glow {
+    width: 100%;
+    padding: 20px 30px; /* Mnogo veći padding */
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-weight: 900; /* Najdeblja slova */
+    font-size: 1.3rem; /* Veći font */
+    cursor: pointer;
+    margin-top: 30px;
+    /* Zadržavamo tvoj sci-fi oblik */
+    clip-path: polygon(3% 0, 100% 0, 100% 70%, 97% 100%, 0 100%, 0 30%);
+    font-family: 'Nulshock', sans-serif;
+    letter-spacing: 2px;
+    box-shadow: 0 0 20px var(--accent-glow);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Elastičan efekat */
+    text-transform: uppercase;
+}
+
+.submit-btn-glow:hover {
+    background: #fff;
+    box-shadow: 0 0 60px var(--accent); /* Jaki sjaj */
+    transform: scale(1.02) translateY(-3px); /* Malo se uveća i skoči */
+}
+
+
+/* CUSTOM ALERT BOX - CENTRIRAN */
+#custom-alert-box {
+    display: none; /* Po defaultu sakriven */
+    position: fixed;
+    top: 50% !important; /* Tačno na sredini visine */
+    left: 50% !important; /* Tačno na sredini širine */
+    transform: translate(-50%, -50%) !important; /* Perfektno centriranje */
+    background: rgba(15, 15, 15, 0.98); /* Skoro crna pozadina */
+    border: 2px solid var(--accent);
+    padding: 40px;
+    z-index: 10001; /* Iznad navigacije (nav je 1000) */
+    text-align: center;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.9), 0 0 30px var(--accent-glow);
+    border-radius: 12px;
+    min-width: 350px;
+    backdrop-filter: blur(10px);
+    animation: alertPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes alertPop {
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Stil za naslov u alertu */
+#alert-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 15px var(--accent);
+}
+
+/* Stil za tekst u alertu */
+#alert-message {
+    font-size: 1.1rem;
+    color: #ddd;
+    line-height: 1.6;
+}
+/* =========================================
+   SAKRIVANJE SKROL TRAKE (INVISIBLE SCROLL)
+   ========================================= */
+
+
+/* Za Firefox i ostale */
+html, body {
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE i stari Edge */
+}
+
+
+/* --- FIX ZA KONTAKT MODAL --- */
+
+.contact-info-row {
+    display: flex;
+    align-items: flex-start; /* Poravnava ikonicu sa vrhom */
+    text-align: left;
+    gap: 15px;
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--accent);
+}
+
+.contact-info-row i {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-top: 5px; /* Spušta ikonicu malo da se poravna sa tekstom */
+    flex-shrink: 0; /* Sprečava da se ikonica spljeska */
+}
+
+.info-text {
+    flex: 1; /* Uzima sav preostali prostor */
+    display: flex;
+    flex-direction: column; /* Ređa Labelu i Adresu jedno ISPOD drugog */
+    overflow: hidden; /* Sprečava izlivanje */
+}
+
+.info-text small {
+    color: #888;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.info-text a, .info-text span {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    
+    /* PROMENA: Umesto 'break-all' koristimo ovo */
+    overflow-wrap: anywhere; 
+    word-break: normal;
+    
+    line-height: 1.3;
+}
+
+/* DODATNO: Malo manji font specifično za email da lakše stane */
+#modal-seller-email {
+    font-size: 0.9rem; 
+}
+
+
+/* --- SIDEBAR FILTERI (OFF-CANVAS) --- */
+
+/* Dugme koje otvara filtere */
+.filter-toggle-btn {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 12px 30px;
+    font-family: 'Nulshock';
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: 0.3s;
+    width: 100%;
+    max-width: 300px;
+}
+
+.filter-toggle-btn:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent);
+}
+
+/* Sidebar kontejner */
+.sidebar {
+    height: 100%;
+    width: 350px; /* Širina na kompjuteru */
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: -400px; /* Sakriveno levo */
+    background-color: #0a0a0a;
+    overflow-x: hidden;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Glatka animacija */
+    border-right: 2px solid var(--accent);
+    box-shadow: 10px 0 50px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kada je aktivno */
+.sidebar.active {
+    left: 0;
+}
+
+/* Header u meniju */
+.sidebar-header {
+    padding: 20px;
+    background: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    color: #fff;
+    font-family: 'Nulshock';
+}
+
+.close-sidebar {
+    color: #888;
+    font-size: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.close-sidebar:hover { color: var(--error); transform: rotate(90deg); }
+
+/* Sadržaj (Scrollabilan) */
+.sidebar-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Naslovi grupa unutar sidebara */
+.sidebar-group-title {
+    color: #888;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #222;
+    text-transform: uppercase;
+}
+
+/* Footer sa dugmićima */
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid #333;
+    background: #111;
+    display: flex;
+    gap: 10px;
+}
+
+.apply-btn {
+    flex: 1; background: var(--accent); color: #000; border: none; padding: 12px;
+    font-weight: bold; cursor: pointer; border-radius: 4px;
+}
+.reset-btn {
+    flex: 1; background: transparent; color: #fff; border: 1px solid #444; padding: 12px;
+    font-weight: bold; cursor: pointer; border-radius: 4px;
+}
+.reset-btn:hover { border-color: var(--error); color: var(--error); }
+
+/* Overlay (Zatamnjenje pozadine) */
+#sidebar-overlay {
+    position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.7); z-index: 1999; backdrop-filter: blur(3px);
+}
+
+/* Tagovi u aktivnom prikazu (ispod dugmeta) */
+.active-summary-tag {
+    display: inline-block; background: rgba(0, 255, 136, 0.1); color: var(--accent);
+    padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; margin: 2px; border: 1px solid var(--accent);
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 85%; /* Na telefonu ne zauzima ceo ekran, da se vidi pozadina */
+        max-width: none;
+    }
+}
+
+
+/* --- SIDEBAR KATEGORIJA SELECT --- */
+.sidebar-category-selector {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #222;
+    padding-bottom: 20px;
+}
+
+.sidebar-category-selector label {
+    display: block;
+    color: var(--accent);
+    font-family: 'Nulshock';
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.sidebar-category-selector select {
+    width: 100%;
+    background-color: #111;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+    appearance: none; /* Sklanja default strelicu browsera */
+    /* Custom strelica */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300ff88%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 12px auto;
+}
+
+.sidebar-category-selector select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+}
+
+
+/* =========================================
+   13. KORPA (SHOPPING CART)
+   ========================================= */
+.cart-container {
+    max-width: 1200px; margin: 0 auto; padding: 20px;
+    display: grid; grid-template-columns: 2fr 1fr; gap: 30px;
+}
+
+/* Lista artikala */
+.cart-item {
+    display: flex; gap: 20px; background: #111; border: 1px solid #333; padding: 15px;
+    margin-bottom: 15px; border-radius: 8px; align-items: center; position: relative;
+}
+.cart-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 4px; border: 1px solid #444; }
+.cart-item-info { flex: 1; }
+.cart-item h3 { font-size: 1.1rem; margin-bottom: 5px; color: #fff; }
+.cart-item .price { color: var(--accent); font-size: 1.2rem; }
+.cart-item .seller { font-size: 0.85rem; color: #888; }
+.remove-btn {
+    background: transparent; border: none; color: var(--error); cursor: pointer; font-size: 1.2rem;
+    padding: 10px; transition: 0.3s;
+}
+.remove-btn:hover { transform: scale(1.2); }
+
+/* Desna strana (Suma) */
+.summary-box {
+    background: #151515; border: 1px solid var(--accent); padding: 25px; border-radius: 8px;
+    position: sticky; top: 120px;
+}
+.summary-box h3 { font-family: 'Nulshock'; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; color: #fff; }
+.summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: #ccc; }
+.summary-row.total { font-size: 1.5rem; color: var(--accent); font-weight: bold; margin-top: 20px; padding-top: 20px; border-top: 1px solid #333; }
+
+/* GeekBit Servis Checkbox */
+.service-option {
+    background: rgba(0, 255, 136, 0.05); border: 1px dashed var(--accent); padding: 15px;
+    border-radius: 6px; margin: 15px 0; display: flex; gap: 10px; align-items: start;
+}
+.service-text strong { color: var(--accent); display: block; margin-bottom: 5px; font-family: 'Nulshock'; }
+.service-text p { font-size: 0.8rem; color: #aaa; line-height: 1.3; }
+.service-price { font-weight: bold; color: #fff; white-space: nowrap; }
+
+/* Custom Checkbox */
+.custom-checkbox input { display: none; }
+.checkmark {
+    height: 20px; width: 20px; background-color: #222; border: 1px solid #555; display: inline-block;
+    position: relative; cursor: pointer; border-radius: 3px; margin-top: 3px;
+}
+.custom-checkbox input:checked ~ .checkmark { background-color: var(--accent); border-color: var(--accent); }
+.custom-checkbox .checkmark:after {
+    content: ""; position: absolute; display: none;
+    left: 6px; top: 2px; width: 5px; height: 10px; border: solid black; border-width: 0 3px 3px 0; transform: rotate(45deg);
+}
+.custom-checkbox input:checked ~ .checkmark:after { display: block; }
+
+.checkout-btn {
+    width: 100%; background: var(--accent); color: black; border: none; padding: 15px;
+    font-weight: bold; font-family: 'Nulshock'; cursor: pointer; border-radius: 4px; margin-top: 10px;
+}
+.checkout-btn:hover { background: #fff; box-shadow: 0 0 20px var(--accent); }
+
+/* Responsive za Korpu */
+@media (max-width: 768px) {
+    .cart-container { grid-template-columns: 1fr; }
+    .cart-item { flex-direction: row; }
+    .summary-box { position: static; }
+}
+
+/* Stilovi za listu prodavaca u modalu */
+.seller-contact-card {
+    background: #222; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 3px solid var(--accent);
+}
+.seller-contact-card h4 { color: #fff; margin-bottom: 5px; }
+.seller-contact-card p { color: #ccc; font-size: 0.9rem; margin: 2px 0; }
+.seller-contact-card a { color: var(--accent); text-decoration: none; font-weight: bold; }
+
+/* --- DIZAJN ZA PRAZNU KORPU (EMPTY STATE) --- */
+
+.empty-cart-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.02); /* Blago svetlija od pozadine */
+    border: 2px dashed #333; /* Isprekidan okvir */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px; /* Daje visinu da parira desnoj kutiji */
+}
+
+.empty-cart-state i.fa-ghost {
+    font-size: 5rem;
+    color: #333;
+    margin-bottom: 20px;
+    animation: floatGhost 3s ease-in-out infinite;
+}
+
+@keyframes floatGhost {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.empty-cart-state h3 {
+    font-family: 'Nulshock';
+    color: #fff;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.empty-cart-state p {
+    color: #888;
+    margin-bottom: 30px;
+    font-size: 1rem;
+}
+
+.empty-btn {
+    padding: 12px 30px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: 0.3s;
+    font-family: 'Nulshock';
+}
+
+.empty-btn:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
+
+/* --- STILOVI ZA BRISANJE --- */
+.close-delete {
+    color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
+}
+.close-delete:hover { color: #ff4d4d; }
+
+/* Animacija nestajanja oglasa */
+.fade-out {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease;
+}
+
+.skeleton {
+    background: #1a1a1a;
+    background-image: linear-gradient(to right, #1a1a1a 0%, #222 20%, #1a1a1a 40%, #1a1a1a 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 100%; 
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}
+@keyframes shimmer {
+    0% { background-position: -468px 0; }
+    100% { background-position: 468px 0; }
+}
+.skeleton-card { height: 300px; width: 100%; border: 1px solid #333; }
+
+
+/* =========================================
+   FIX ZA GALERIJU I SLIKE (CENTRIRANJE)
+   ========================================= */
+
+/* 1. Glavni prozor (Crna pozadina) */
+#image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999; /* Mora biti iznad svega */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95); /* Tamnija pozadina da se bolje vidi */
+    backdrop-filter: blur(5px);
+    
+    /* FLEX CENTRIRANJE - Ovo rešava sve */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Trik: JS postavlja 'display: block', ali mi forsiramo 'flex' da bi centriranje radilo */
+#image-modal[style*="display: block"] {
+    display: flex !important;
+}
+
+/* 2. Omotač (Drži sliku i tekst na okupu) */
+.modal-gallery-wrapper {
+    display: flex;
+    flex-direction: column; /* Slika gore, tekst dole */
+    align-items: center;
+    justify-content: center;
+    max-width: 95%;
+    max-height: 95vh;
+    position: relative;
+}
+
+/* 3. Sama Slika */
+#modal-img {
+    max-width: 100%;
+    max-height: 80vh; /* Ostavljamo 20% visine za strelice i tekst! */
+    object-fit: contain; /* Slika se nikad neće razvući ili iseći */
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.1);
+    border-radius: 6px;
+    
+    /* PONIŠTAVAMO STARE STILOVE (Bitno!) */
+    margin: 0;
+    top: auto;
+    transform: none;
+    position: relative;
+    background: #000;
+}
+
+/* 4. Tekst i Strelice ispod */
+#modal-caption {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    margin-top: 15px;
+    background: transparent;
+    animation: fadeIn 0.5s;
+}
+
+/* Dugme za zatvaranje (X) */
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+    transition: 0.3s;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: var(--error);
+    background: rgba(255,255,255,0.1);
+}
+
+/* Animacija pojave */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+/* =========================================
+   FIX ZA CHECKOUT MODAL (CENTRIRANJE) 🛒
+   ========================================= */
+
+/* 1. Glavni kontejner */
+#checkout-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
+    
+    /* FLEX CENTRIRANJE - MAGIJA */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Osigurava da flex radi i kad JS postavi display: block */
+#checkout-modal[style*="display: block"] {
+    display: flex !important;
+}
+
+/* 2. Unutrašnja kutija */
+#checkout-modal .contact-modal-content {
+    margin: 0 !important; /* Poništavamo stari margin */
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh; /* Ne sme da bude viši od ekrana */
+    display: flex;
+    flex-direction: column;
+    background: #111;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.15);
+    border-radius: 12px;
+    padding: 30px;
+    position: relative;
+}
+
+/* 3. Lista koja se skroluje */
+#sellers-list {
+    overflow-y: auto; /* Skrol samo unutar liste */
+    max-height: 60vh; /* Ograničena visina liste */
+    padding-right: 10px; /* Mesto za scrollbar */
+    margin-top: 15px;
+    text-align: left; /* Tekst ostaje levo poravnat */
+}
+
+/* Lepši scrollbar za listu */
+#sellers-list::-webkit-scrollbar { width: 6px; }
+#sellers-list::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+#sellers-list::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+
+/* =========================================
+   STILOVI ZA PRETRAGU I SORTIRANJE (FIX)
+   ========================================= */
+
+/* Stil za select strelicu i hover */
+.sort-container select {
+    appearance: none; /* Sklanja default strelicu */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300ff88%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 10px auto;
+    transition: 0.3s;
+}
+
+.sort-container select:focus, 
+.search-container input:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+}
+
+/* RESPONSIVE: Na telefonu jedno ispod drugog */
+@media (max-width: 768px) {
+    .search-sort-wrapper {
+        flex-direction: column;
+        gap: 10px !important;
+    }
+    .search-container, .sort-container {
+        width: 100% !important;
+    }
+}
+
+
+/* =========================================
+   STIL ZA DUGME "UCITAJ JOŠ" ⚡
+   ========================================= */
+
+#load-more-btn {
+    background: transparent;
+    color: var(--accent); /* Neon zelena slova */
+    border: 1px solid var(--accent); /* Neon okvir */
+    padding: 15px 50px; /* Široko dugme */
+    font-family: 'Nulshock', sans-serif; /* Tvoj font */
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    
+    /* Cyberpunk oblik (odsečeni ivice) */
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+}
+
+#load-more-btn:hover {
+    background: var(--accent);
+    color: #000; /* Crna slova na zelenoj pozadini */
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.4); /* Glow efekat */
+    transform: translateY(-3px); /* Malo se podigne */
+}
+
+#load-more-btn:disabled {
+    border-color: #333;
+    color: #555;
+    background: transparent;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Ikonica unutar dugmeta */
+#load-more-btn i {
+    margin-left: 10px;
+    transition: 0.3s;
+}
+
+#load-more-btn:hover i {
+    transform: translateY(3px); /* Strelica ide dole na hover */
+}
+
+
+/* =========================================
+   FIX ZA PREMIUM MODAL (CENTRIRANJE) 👑
+   ========================================= */
+
+#premium-modal {
+    display: none;
+    position: fixed;
+    z-index: 3000; /* Najviši prioritet */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(8px);
+    
+    /* FLEX CENTRIRANJE */
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Kada je prikazan, mora biti flex */
+#premium-modal[style*="display: block"] {
+    display: flex !important;
+}
+
+/* Reset margina za sadržaj */
+#premium-modal .contact-modal-content {
+    margin: 0 !important;
+    max-height: 95vh;
+    overflow-y: auto; /* Ako je ekran mali, da može da se skroluje */
+}
+
+/* PREMIUM DUGME STIL */
+.premium-btn {
+    background: linear-gradient(45deg, #FFD700, #FFC107); /* Zlatni gradijent */
+    color: #000; /* Crna slova za kontrast */
+    border: none;
+    padding: 12px 30px;
+    font-family: 'Nulshock', sans-serif;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 50px; /* Zaobljeno */
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); /* Zlatni sjaj */
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    text-decoration: none;
+}
+
+.premium-btn:hover {
+    transform: translateY(-3px) scale(1.05); /* Malo skoči */
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); /* Jači sjaj */
+    background: linear-gradient(45deg, #fff, #FFD700); /* Zasija belo na hover */
+}
+
+.premium-btn i {
+    font-size: 1.2rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-5px);}
+    60% {transform: translateY(-3px);}
+}
+
+/* Osigurava da je X uvek na vrhu i da se vidi */
+.close-modal {
+    position: absolute !important;
+    top: 15px !important;
+    right: 20px !important;
+    z-index: 10000 !important; /* Najviši prioritet */
+    cursor: pointer !important;
+    color: #fff !important; /* Bela boja da se vidi na tamnom */
+    background: rgba(0,0,0,0.5); /* Mala pozadina da se istakne */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    background: red !important; /* Crveno kad pređeš mišem */
+    color: white !important;
+}
+
+
+/* --- POPRAVKA KARTICA I DUGMICA --- */
+
+/* Poravnanje dugmića na dnu kartice */
+.card-actions {
+    display: flex;
+    justify-content: space-between; /* Razmakni ih */
+    padding-top: 10px;
+    border-top: 1px solid #222;
+    margin-top: 10px;
+}
+
+/* Stil za dugmiće (Korpa, Telefon, Prijava) */
+.action-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    width: 35px;
+    height: 35px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover efekti (Svaki dugme sija drugom bojom) */
+.cart-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: 0 0 10px var(--accent); }
+.call-btn:hover { color: #0088ff; border-color: #0088ff; box-shadow: 0 0 10px #0088ff; }
+.report-btn:hover { color: #ff4d4d; border-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; }
+
+/* Popravka za Tagove u formi (da ne budu razbacani) */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Mali razmak */
+    justify-content: flex-start; /* Uvek levo */
+}
+
+/* Tagovi u sidebaru */
+#sidebar-tags-container button {
+    margin: 3px;
+    font-size: 0.8rem;
+}
+
+
+
+/* =========================================
+   COMPACT & COOL REDESIGN (FIX) 🔧
+   ========================================= */
+
+/* 1. KARTICA - Smanjujemo razmake */
+.product-card {
+    padding: 0 !important; /* Reset paddinga */
+    background: #0f0f0f;
+    border: 1px solid #222;
+}
+
+.product-info {
+    padding: 12px; /* Manje prostora unutra */
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 5px;
+}
+
+.product-header h3 {
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.2;
+    max-width: 70%;
+}
+
+.product-header .price {
+    font-size: 1rem;
+    color: var(--accent);
+    text-align: right;
+}
+
+/* 2. DUGMIĆI (IKONICE) - Kompaktni red */
+.card-actions {
+    display: flex;
+    justify-content: space-between; /* Razvuci ih lepo */
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #222;
+}
+
+.action-btn {
+    width: 32px;       /* Fiksna mala širina */
+    height: 32px;      /* Fiksna mala visina */
+    border-radius: 6px; /* Blago zaobljeno */
+    background: transparent;
+    border: 1px solid #333;
+    color: #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+/* Hover efekti (Neon Glow) */
+.cart-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.call-btn:hover {
+    color: #0088ff;
+    border-color: #0088ff;
+    box-shadow: 0 0 8px rgba(0, 136, 255, 0.4);
+    background: rgba(0, 136, 255, 0.05);
+}
+
+.report-btn:hover {
+    color: #ff4d4d;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+    background: rgba(255, 77, 77, 0.05);
+}
+
+/* 3. TAGOVI U FORMI - Uredno složeni */
+#form-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; /* Mali razmak između dugmića */
+}
+
+#form-tags-container button.tag-btn {
+    font-size: 0.75rem; /* Sitnija slova */
+    padding: 4px 10px; /* Manje "mesa" */
+    border-radius: 4px; /* Kockastije = više tech */
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #aaa;
+    flex-grow: 0; /* Ne razvlači se */
+}
+
+#form-tags-container button.tag-btn.active-tag {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+/* 4. PRODAVAC INFO (Mali red) */
+.seller-info {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.seller-info:hover { color: #fff; }
+
+
+
+/* --- FIKSIRANE KARTICE (GRID FIX) --- */
+
+.product-card {
+    height: 400px; /* Fiksna visina za sve */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #0f0f0f;
+    border: 1px solid #222;
+    overflow: hidden; /* Da ništa ne iscuri */
+}
+
+/* Slika uvek iste visine */
+.card-image-container {
+    height: 180px; 
+    flex-shrink: 0; /* Ne sme da se smanjuje */
+    width: 100%;
+}
+
+.card-image-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Popunjava ostatak prostora */
+}
+
+/* OGRANIČAVANJE TEKSTA (Tri tačke) */
+.description-preview {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    
+    /* Magija za sečenje teksta posle 2 reda */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Broj redova teksta */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 2.8em; /* Fiksna visina za tekst */
+}
+
+/* Naslov takođe samo 1 red */
+.product-header h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+}
+
+/* Dugmići uvek na dnu */
+.card-actions {
+    margin-top: auto; 
+    padding-top: 10px;
+    border-top: 1px solid #222;
+}
+
+/* --- FIX ZA KARTICE NA POČETNOJ (SLAJDER) --- */
+
+#latest-container {
+    /* Osigurava da red ne prelama */
+    display: flex;
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    gap: 20px;
+    padding: 20px 0;
+    /* Sakriva scrollbar da bude lepše */
+    scrollbar-width: none; 
+}
+
+#latest-container .product-card {
+    /* FIKSNE DIMENZIJE ZA SLAJDER */
+    min-width: 280px;  /* Ne sme biti uže od ovoga */
+    max-width: 280px;  /* Ne sme biti šire od ovoga */
+    height: 400px;     /* Ista visina kao na Berzi */
+    
+    /* Sprečava deformaciju */
+    flex-shrink: 0; 
+    flex-grow: 0;
+    
+    /* Ostalo isto */
+    display: flex;
+    flex-direction: column;
+    margin: 0; 
+}
+
+/* --- FIX ZA KARTICE NA POČETNOJ (KOMPAKTNE) --- */
+#latest-container {
+    display: flex;
+    flex-wrap: nowrap; 
+    overflow-x: auto; 
+    gap: 15px; /* Manji razmak */
+    padding: 20px 0;
+    scrollbar-width: none; 
+}
+
+#latest-container .product-card {
+    /* SMANJENE DIMENZIJE (Iste kao na Berzi) */
+    min-width: 220px; 
+    max-width: 220px;
+    height: 360px; /* Malo niže da budu slatke */
+    
+    flex-shrink: 0; 
+    flex-grow: 0;
+    display: flex;
+    flex-direction: column;
+    margin: 0; 
+}
+
+/* Prilagođena slika za manje kartice */
+#latest-container .card-image-container {
+    height: 150px; /* Malo manja slika */
+    width: 100%;
+}
+
+
+/* =========================================
+   PREMIUM MODAL ANIMACIJE ✨
+   ========================================= */
+
+/* 1. KRUNA KOJA SKAČE (Bounce Efekat) */
+@keyframes bounce-crown-modal {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-12px);} /* Skoči gore */
+    60% {transform: translateY(-6px);}  /* Malo se vrati */
+}
+
+/* 2. ZLATNO PRESIJAVANJE ZA "PRO DEALER" KARTICU */
+@keyframes shimmer-gold-card {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.pro-dealer-shimmer {
+     /* Ovo pravi magiju: mešamo tamnu pozadinu sa zlatnim tonovima */
+    background: linear-gradient(-45deg, #0f0f0f, #2a2200, #4a3a00, #0f0f0f);
+    background-size: 400% 400%; /* Povećamo pozadinu da bi mogla da se pomera */
+    animation: shimmer-gold-card 6s ease infinite; /* Pokreni animaciju */
+    border: 1px solid gold !important; /* Forsiramo jak zlatni okvir */
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.15) !important;
+}
+
+
+/* 3. ANIMACIJA ULASKA U MODAL (POP-UP) */
+@keyframes modalPopIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8); /* Počinje manji i providan */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Završava normalne veličine */
+    }
+}
+
+
+/* Stil za naslov grupe (npr. "Proizvođač Čipa:") */
+    .spec-group-title {
+        display: block;
+        color: var(--accent); /* Neon zelena */
+        font-size: 0.9rem;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        font-family: 'Rajdhani', sans-serif;
+        font-weight: 600;
+        border-bottom: 1px solid #333;
+        padding-bottom: 2px;
+        width: 100%;
+    }
+
+    /* Stil za dugmiće */
+    .tag-btn {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        color: #888;
+        padding: 6px 12px;
+        margin: 3px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.2s ease;
+        display: inline-block;
+    }
+
+    /* Hover efekat */
+    .tag-btn:hover {
+        border-color: #555;
+        color: #fff;
+    }
+
+    /* ⚠️ OVO REŠAVA PROBLEM "NIŠTA SE NE DEŠAVA" */
+    /* Kada je dugme aktivno (kliknuto) */
+    .tag-btn.active {
+        background-color: var(--accent); /* Zelena pozadina */
+        color: #000; /* Crni tekst */
+        border-color: var(--accent);
+        font-weight: bold;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+    }
+    
+    /* Kontejner za tagove */
+    #form-tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+    }
+
+
+/* Dizajn za donji red dugmića na kartici */
+.card-actions-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    align-items: stretch; /* Da svi budu iste visine */
+}
+
+/* Dugme za Kontakt (Srednje, najveće, zeleno) */
+.btn-contact {
+    flex: 2; /* Zauzima najviše mesta */
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    font-family: 'Rajdhani', sans-serif;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    text-transform: uppercase;
+}
+.btn-contact:hover {
+    background: #fff;
+    box-shadow: 0 0 15px var(--accent);
+}
+
+/* Ikonice za Korpu i Prijavu (Manji, sa strane) */
+.btn-icon {
+    flex: 1; /* Manji su */
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+}
+.btn-icon:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 255, 136, 0.05);
+}
+.btn-icon.report:hover {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+}
+
+/* Red sa imenom prodavca */
+.seller-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-top: 5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #222;
+    margin-bottom: 10px;
+}
+
+
+/* Osigurava da je modal uvek na sredini ekrana */
+#edit-modal {
+    display: none; /* Po defaultu sakriven */
+    position: fixed; 
+    z-index: 10001; /* Iznad svega */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.85); /* Tamna pozadina */
+    
+    /* KLJUČNO ZA CENTRIRANJE: */
+    align-items: center; 
+    justify-content: center;
+}
+
+/* --- NOVO DUGME ZA KOMPATIBILNOST --- */
+.btn-cyber-check {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: transparent; /* Providna pozadina */
+    border: 2px solid var(--accent); /* Zeleni okvir */
+    color: var(--accent); /* Zelena slova */
+    font-family: 'Nulshock', sans-serif; /* Tvoj font */
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.1); /* Blagi sjaj */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-cyber-check:hover {
+    background: var(--accent); /* Zelena pozadina na hover */
+    color: #000; /* Crna slova na hover */
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); /* Jači sjaj */
+    transform: translateY(-2px); /* Malo skoči gore */
+}
+
+.btn-cyber-check i {
+    font-size: 1.2rem;
+}
+
+/* --- CUSTOM CHECKBOX DIZAJN --- */
+
+/* 1. Sakrivamo pravi, dosadni checkbox */
+#geekbit-service-check {
+    display: none;
+}
+
+/* 2. Pravimo naš novi okvir */
+.custom-checkbox-box {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--accent); /* Zeleni okvir */
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px rgba(0, 255, 136, 0.2); /* Blagi sjaj */
+    background: transparent;
+}
+
+/* 3. Šta se desi kad je štikliran (Svetli zeleno) */
+#geekbit-service-check:checked + .custom-checkbox-box {
+    background-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent); /* Jači sjaj */
+}
+
+/* 4. Ikonica štikliranja (vidljiva samo kad je checked) */
+.custom-checkbox-box::after {
+    content: '\f00c'; /* FontAwesome kod za štrik */
+    font-family: "Font Awesome 5 Free"; 
+    font-weight: 900;
+    color: #000; /* Crna boja da se vidi na zelenom */
+    font-size: 14px;
+    display: none; /* Po defaultu nevidljivo */
+}
+
+#geekbit-service-check:checked + .custom-checkbox-box::after {
+    display: block; /* Prikaži kad je checked */
+}
+
+/* Hover efekat */
+.service-option:hover .custom-checkbox-box {
+    transform: scale(1.1);
+}
+
+.product-card {
+    /* ... tvoje postojeće ... */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ovo gura sadržaj da popuni visinu */
+    padding-bottom: 15px !important; /* OVO JE KLJUČNO - dodaje prostor na dnu */
+    height: 100%; /* Da sve kartice budu iste visine */
+}
+
+/* Dodatno osiguranje za donji red */
+.card-actions-row {
+    margin-top: auto; /* Gura dugmiće na samo dno kontejnera */
+    padding: 10px 5px 0 5px; /* Malo lufta gore i sa strane */
+}
+
+/* --- FIX ZA NAJNOVIJE OGLASE (Da ne budu sabijeni) --- */
+
+#latest-container .product-card {
+    /* 1. Obezbeđuje da kartica bude dovoljno visoka */
+    min-height: 480px !important; 
+    
+    /* 2. Dodaje vazduh na dnu kartice (ispod dugmića) */
+    padding-bottom: 25px !important; 
+    
+    /* 3. Raspoređuje elemente tako da dugmići odu dole, ali ne skroz do ivice */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Dodatni razmak iznad samih dugmića */
+#latest-container .card-actions-row {
+    margin-top: auto !important;
+    margin-bottom: 5px !important;
+    padding-top: 15px !important;
+}
+
+/* --- FIX ZA NAJNOVIJE OGLASE (Smanjena visina) --- */
+
+#latest-container .product-card {
+    /* Smanjili smo sa 480px na 350px da ne bude preveliko */
+    min-height: 350px !important; 
+    
+    /* Vraćamo normalan padding */
+    padding-bottom: 15px !important; 
+    
+    /* Ovo drži dugmiće na dnu, ali pošto je visina manja, rupa je manja */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Malo prostora iznad dugmića da ne udaraju u tekst */
+#latest-container .card-actions-row {
+    margin-top: auto !important;
+    padding-top: 15px !important;
+}
+
+/* --- FIX ZA NAJNOVIJE OGLASE (Zlatna sredina) --- */
+
+#latest-container .product-card {
+    /* 1. Visina taman da stane sve, a da nije rupa */
+    min-height: 380px !important; 
+    
+    /* 2. OVO JE ONO ŠTO TRAŽIŠ: Prostor između dugmića i donje ivice kartice */
+    padding-bottom: 25px !important; 
+    
+    /* 3. Flex raspored */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 4. Malo odvajanja od teksta iznad */
+#latest-container .card-actions-row {
+    margin-top: auto !important;
+    padding-top: 15px !important;
+}
+
+/* ==========================================================================
+   🚨 1. DESKTOP NAVIGACIJA - RESET
+   ========================================================================== */
+@media screen and (min-width: 769px) {
+    nav {
+        display: flex !important;
+        justify-content: flex-start !important;
+        height: 90px !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+    }
+    .nav-links {
+        display: flex !important;
+        flex-direction: row !important;
+        position: static !important;
+        height: auto !important;
+        background: transparent !important;
+        transform: none !important;
+        margin-left: auto !important;
+        padding: 0 !important;
+        width: auto !important;
+    }
+    .burger { display: none !important; }
+    .login-item { margin-top: 0 !important; border: none !important; }
+}
+
+/* ==========================================================================
+   📱 2. MOBILNI DIZAJN (SVE POPRAVKE)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+
+    /* --- A. BURGER MENI --- */
+    nav { padding: 0 15px !important; height: 70px !important; justify-content: space-between !important; background: #000 !important; }
+    .nav-links { position: fixed !important; top: 70px !important; left: 0 !important; width: 100% !important; height: calc(100vh - 70px) !important; background: #000 !important; flex-direction: column !important; justify-content: flex-start !important; padding-top: 20px !important; }
+    .nav-links li { width: 100% !important; border-bottom: 1px solid #222 !important; text-align: center !important; }
+    .nav-links li a { display: block !important; padding: 15px 0 !important; font-size: 1.1rem !important; color: #fff !important; width: 100% !important; }
+    .login-item { margin-top: auto !important; margin-bottom: 50px !important; width: 100% !important; display: flex !important; flex-direction: column !important; gap: 15px !important; border-top: 1px solid #333 !important; padding: 20px !important; background: #111 !important; align-items: center !important; }
+    #user-profile-btn { width: 90% !important; display: flex !important; justify-content: center !important; gap: 10px !important; margin: 0 auto !important; padding: 12px !important; border-radius: 50px !important; background: rgba(0, 255, 136, 0.1) !important; }
+    #logout-btn { width: 90% !important; justify-content: center !important; }
+
+    /* --- B. OGLASI LISTA (INDEX I BERZA - 100% ŠIRINA) --- */
+    #all-products-container, #latest-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 10px !important; /* Malo lufta sa strane */
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* KARTICA - FULL WIDTH */
+ .product-card, #latest-container .product-card {
+        display: flex !important;
+        flex-direction: row !important; /* Slika levo, tekst desno */
+        height: 165px !important; 
+        min-height: 165px !important;     /* Fiksna visina da stane sve */
+        width: 100% !important;
+        background: #111 !important;
+        border: 1px solid #333 !important;
+        border-radius: 6px !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+        overflow: hidden !important;
+    }
+
+  .card-image-container, #latest-container .card-image-container {
+        width: 130px !important;
+        height: 100% !important;
+        flex-shrink: 0 !important;
+        border-right: 1px solid #333 !important;
+        border-bottom: none !important;
+    }
+    .card-image-container img {
+        height: 100% !important;
+        width: 100% !important;
+        object-fit: cover !important;
+    }
+
+/* 3. Tekst (Desno) - KLJUČNI DEO */
+    .product-info, #latest-container .product-info {
+        flex: 1 !important;
+        padding: 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        min-width: 0 !important; /* MAGIJA: Sprečava da tekst izgura karticu */
+    }
+
+   /* 4. Naslov (Dozvoljava 2 reda) */
+    .product-info h3 {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important; /* Max 2 reda */
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        white-space: normal !important; /* Dozvoli prelamanje! */
+        
+        font-size: 0.95rem !important;
+        line-height: 1.2 !important;
+        margin: 0 0 5px 0 !important;
+        color: #fff !important;
+    }
+    /* 5. Opis (Vraćen, 1 red) */
+    .product-info p {
+        display: block !important; /* VRAĆAMO OPIS */
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important; /* Tri tačke na kraju */
+        
+        font-size: 0.75rem !important;
+        color: #999 !important;
+        margin: 0 0 5px 0 !important;
+    }
+/* 6. Cena */
+    .product-info .price {
+        font-size: 1.1rem !important;
+        color: #00ff88 !important;
+        font-weight: bold !important;
+        margin: 0 !important;
+    }
+
+/* 7. Dugmići (Da budu lepo složeni dole) */
+    .card-actions-row, #latest-container .card-actions-row {
+        display: flex !important;
+        gap: 5px !important;
+        margin-top: auto !important;
+    }
+    .btn-contact, .btn-icon { padding: 0 !important; font-size: 0.75rem !important; height: 35px !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+    .btn-contact { flex: 2 !important; } .btn-icon { flex: 1 !important; }
+
+    /* --- C. KONTAKT MODAL FIX (SPUŠTANJE) --- */
+    #contact-modal {
+        align-items: center !important; /* Centrira vertikalno */
+        padding-top: 0 !important; 
+    }
+    
+    #contact-modal .contact-modal-content {
+        margin: 0 auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 90% !important;
+        max-width: 350px !important;
+        position: relative !important;
+        border: 2px solid var(--accent) !important;
+    }
+
+
+    /* ============================================================
+       📱 FIX ZA KARTICE (DA SE VIDE NASLOV I OPIS)
+       Zameni ili dodaj ovo na dno @media (max-width: 768px)
+       ============================================================ */
+
+    /* 1. GLAVNI OKVIR KARTICE */
+    #latest-container .product-card, 
+    #all-products-container .product-card {
+        display: flex !important;
+        flex-direction: row !important; /* Slika levo, tekst desno */
+        height: 140px !important;       /* Fiksna visina */
+        width: 100% !important;
+        background: #111 !important;
+        border: 1px solid #333 !important;
+        border-radius: 6px !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+        overflow: hidden !important;
+    }
+
+    /* 2. SLIKA (KOCKA LEVO) */
+    .card-image-container {
+        width: 130px !important; /* Fiksna širina */
+        height: 100% !important; /* Puna visina kartice */
+        flex-shrink: 0 !important; /* Ne dozvoli da se skupi */
+        border-right: 1px solid #333 !important;
+        border-bottom: none !important; /* Brišemo donju liniju */
+    }
+    
+    .card-image-container img {
+        height: 100% !important;
+        width: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* 3. TEKST I DUGMIĆI (DESNO) */
+    .product-info {
+        flex: 1 !important; /* Zauzmi sav preostali prostor */
+        padding: 8px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important; /* Rasporedi elemente gore/dole */
+        min-width: 0 !important; /* MAGIJA: Sprečava da tekst "izgura" karticu */
+    }
+
+    /* 4. NASLOV (VIDLJIV U 2 REDA) */
+    .product-info h3 {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important; /* Prikazi max 2 reda */
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        white-space: normal !important; /* DOZVOLI PRELAMANJE TEKSTA! */
+        
+        font-size: 0.9rem !important;
+        line-height: 1.2 !important;
+        margin: 0 0 2px 0 !important;
+        color: #fff !important;
+        height: auto !important;
+    }
+
+    /* 5. CENA */
+    .product-info .price {
+        font-size: 1rem !important;
+        color: #00ff88 !important;
+        font-weight: bold !important;
+        margin: 0 !important;
+        text-align: left !important;
+    }
+
+    /* 6. OPIS (KRATAK, 1 RED) */
+    .product-info p {
+        display: block !important; /* VRAĆAMO OPIS DA SE VIDI */
+        white-space: nowrap !important; /* Samo jedan red */
+        overflow: hidden !important;
+        text-overflow: ellipsis !important; /* Tri tačke na kraju... */
+        
+        font-size: 0.75rem !important;
+        color: #888 !important;
+        margin: 0 0 5px 0 !important;
+        line-height: 1.2 !important;
+    }
+
+
+    /* --- SILOM VRAĆAMO OPIS --- */
+.product-info p, 
+#latest-container .product-info p {
+    display: -webkit-box !important;  /* Mora flexbox za line-clamp */
+    visibility: visible !important;   /* Sigurno vidljivo */
+    opacity: 1 !important;            /* Sigurno neprovidno */
+    
+    -webkit-line-clamp: 2 !important; /* Dva reda teksta */
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    white-space: normal !important;   /* Prelamanje teksta */
+    
+    font-size: 0.75rem !important;
+    color: #bbb !important;           /* Svetlo siva (da se vidi na crnom) */
+    margin: 4px 0 8px 0 !important;   /* Razmak gore i dole */
+    line-height: 1.3 !important;
+    min-height: 2.6em !important;     /* Rezerviše visinu za 2 reda čak i ako nema teksta */
+}
+
+    /* 7. DUGMIĆI (KORPA/KONTAKT) */
+    .card-actions-row {
+        display: flex !important;
+        gap: 5px !important;
+       margin-top: 0 !important;
+       padding-top: 5px !important;
+       border-top: 1px solid #222 !important;
+    }
+
+    /* Stil dugmića da budu mali i stanu */
+    .btn-contact, .btn-icon {
+        height: 30px !important;
+        font-size: 0.75rem !important;
+        padding: 0 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Sakrivamo ime prodavca i bedževe da ne guše prostor */
+    .category-badge, .status-badge { 
+        display: none !important; 
+    }
+
+
+    /* VRAĆAMO IME I VERIFIKACIJU NA MOBILNOM */
+.product-card .seller-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;            /* Mali razmak između imena i štrika */
+    font-size: 0.75rem !important;  /* Sitnija slova */
+    color: #aaa !important;
+    margin-top: auto !important;   /* Malo odvojeno od cene */
+   margin-bottom: 5px !important;
+    padding: 0 !important;
+    border: none !important;
+    width: 100% !important;
+}
+
+/* ZLATNI ŠTRIK NA MOBILNOM */
+.product-card .seller-row i.fa-check-circle {
+    color: gold !important;         /* Zlatna boja */
+    font-size: 0.8rem !important;   /* Veličina */
+    margin-left: 2px !important;    /* Mali razmak od imena */
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5) !important; /* Zlatni sjaj */
+}
+
+    /* =======================================================
+       🚑 FIX ZA ŠIRINU KARTICE (DA IDE OD IVICE DO IVICE)
+       Dodaj ovo na dno dela za mobilni
+       ======================================================= */
+
+    /* 1. KONTEJNER - MORA DA RAZVUČE DECU */
+    #all-products-container, 
+    #latest-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important; /* KLJUČNO: Razvlači kartice skroz */
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 5px !important; /* Minimalni razmak od ivice ekrana */
+        box-sizing: border-box !important;
+    }
+
+    /* 2. KARTICA - MORA BITI 100% */
+    .product-card, 
+    #latest-container .product-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important; /* Nema skupljanja! */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+        
+        /* Zadržavamo tvoj raspored */
+        display: flex !important;
+        flex-direction: row !important;
+    }
+
+
+    /* =======================================================
+       🚑 FIX VISINE I ŠIRINE (KOMPAKTNA TRAKA)
+       Zameni ovo na dnu fajla
+       ======================================================= */
+
+    /* 1. KONTEJNER - RAZVLAČI DO IVICA */
+    #all-products-container, 
+    #latest-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important; /* KLJUČNO: Širi kartice skroz */
+        gap: 8px !important;             /* Manji razmak između oglasa */
+        padding: 5px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2. KARTICA - NISKA I ŠIROKA */
+    .product-card, 
+    #latest-container .product-card {
+        width: 100% !important;
+        height: 115px !important;       /* 🔥 SMANJENA VISINA NA 115px */
+        min-height: 115px !important;
+        max-height: 115px !important;   /* Zaključana visina */
+        
+        display: flex !important;
+        flex-direction: row !important; /* Slika levo, tekst desno */
+        background: #111 !important;
+        border: 1px solid #333 !important;
+        border-radius: 6px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;    /* Odseca sve što viri */
+    }
+
+    /* 3. SLIKA - KOCKA (115x115) */
+    .card-image-container, 
+    #latest-container .card-image-container {
+        width: 115px !important;        /* Ista kao visina kartice */
+        height: 100% !important;
+        flex-shrink: 0 !important;
+        border-right: 1px solid #333 !important;
+        border-bottom: none !important;
+    }
+    
+    .card-image-container img {
+        height: 100% !important;
+        width: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* 4. TEKST I DUGMIĆI (ZBIJENO) */
+    .product-info, 
+    #latest-container .product-info {
+        flex: 1 !important;
+        padding: 5px 8px !important;    /* Manji padding unutra */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        min-width: 0 !important;
+    }
+
+    /* Naslov */
+    .product-info h3 {
+        font-size: 0.85rem !important;  /* Malo manji font */
+        margin: 0 !important;
+        line-height: 1.1 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        white-space: normal !important;
+    }
+
+    /* Cena */
+    .product-info .price {
+        font-size: 1rem !important;
+        margin: 2px 0 !important;
+    }
+
+.product-info p {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important; /* Dozvoli 2 reda teksta */
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        font-size: 0.75rem !important;
+        color: #999 !important;
+        margin: 5px 0 !important;       /* Malo razmaka */
+        line-height: 1.2 !important;
+        white-space: normal !important; /* Prelamanje teksta */
+    }
+
+    /* Dugmići (Mali) */
+    .card-actions-row, 
+    #latest-container .card-actions-row {
+        margin-top: auto !important;
+        display: flex !important;
+        gap: 5px !important;
+        padding: 0 !important;
+    }
+
+    .btn-contact, .btn-icon {
+        height: 26px !important;       /* Baš tanki dugmići */
+        font-size: 0.7rem !important;
+        padding: 0 5px !important;
+    }
+}
+
+/* ==========================================================================
+   🚨 3. GLOBALNI POPRAVCI (GALERIJA & X DUGME) - VAN MEDIA QUERY
+   ========================================================================== */
+
+/* 1. X DUGME - UVEK NA VRHU I ZELENO/CRVENO */
+.close-modal, .close-contact, .close-delete {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 2147483647 !important; /* Iznad svega */
+    width: 45px !important;
+    height: 45px !important;
+    background: #000 !important; /* Crna pozadina */
+    color: #fff !important;
+    border: 2px solid #ff4d4d !important; /* Crveni okvir */
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.5) !important;
+}
+
+/* 2. STILIZACIJA GALERIJE (ISPOD SLIKE) */
+.modal-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    background: #111 !important;
+    padding: 10px 20px !important;
+    border-radius: 50px !important;
+    border: 1px solid var(--accent) !important;
+    margin-top: 15px !important;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2) !important;
+}
+
+.gallery-arrow {
+    background: transparent !important;
+    border: none !important;
+    color: var(--accent) !important; /* Zelena boja */
+    font-size: 1.5rem !important;
+    cursor: pointer !important;
+    padding: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: 0.2s !important;
+}
+
+.gallery-arrow:active { transform: scale(0.8) !important; }
+
+#modal-caption {
+    color: #fff !important;
+    font-family: 'Nulshock', sans-serif !important;
+    font-size: 1rem !important;
+    letter-spacing: 1px !important;
+    margin: 0 !important;
+}
+
+/* Resetovanje slike u modalu da ne bude prevelika */
+#modal-img {
+    max-height: 65vh !important; /* Manja visina da stane kontrola ispod */
+    width: auto !important;
+    max-width: 100% !important;
+    margin-bottom: 0 !important;
+}
+
+
+/* =======================================================
+   🚑 FINALNI FIX ZA KONTAKT MODAL (POZICIJA I X DUGME)
+   ======================================================= */
+
+/* 1. SAMO KONTAKT MODAL - CENTRIRANJE */
+#contact-modal {
+    display: none; /* JS menja ovo, ali po defaultu sakriven */
+    align-items: center !important; /* Vertikalno centriranje */
+    justify-content: center !important; /* Horizontalno centriranje */
+    padding-top: 0 !important;
+}
+
+/* Kada je otvoren, mora biti flex da bi centriranje radilo */
+#contact-modal[style*="display: block"] {
+    display: flex !important;
+}
+
+/* 2. KUTIJA (Crna pozadina) */
+#contact-modal .contact-modal-content {
+    position: relative !important; /* Ovo je sidro za X dugme */
+    margin: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 90% !important;
+    max-width: 380px !important;
+    background: #111 !important;
+    border: 2px solid var(--accent) !important;
+    border-radius: 12px !important;
+    padding: 30px 20px !important;
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.15) !important;
+}
+
+/* 3. X DUGME (CRVENO I UNUTRA) - SPECIFIČNO ZA KONTAKT */
+#contact-modal .close-contact {
+    position: absolute !important; /* Zalepljeno za KUTIJU, ne za ekran */
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 100 !important;
+    
+    width: 35px !important;
+    height: 35px !important;
+    background: rgba(255, 77, 77, 0.1) !important; /* Blago crvena pozadina */
+    color: #ff4d4d !important; /* Crveno slovo */
+    border: 1px solid #ff4d4d !important;
+    border-radius: 50% !important;
+    
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    
+    /* Resetovanje globalnih stilova koji su pravili problem */
+    box-shadow: none !important; 
+    left: auto !important;
+    transform: none !important;
+}
+
+#contact-modal .close-contact:hover {
+    background: #ff4d4d !important;
+    color: white !important;
+}
+
+
+
+
+/* =======================================================
+   🔧 FIX ZA SEARCH I SORT PORAVNANJE
+   ======================================================= */
+
+/* 1. Glavni omotač - drži ih u liniji */
+.search-sort-wrapper {
+    display: flex !important;
+    align-items: center !important; /* Centrira po visini */
+    gap: 15px !important;
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    width: 100%;
+}
+
+/* 2. Search Kontejner (Levo) */
+.search-container {
+    flex: 1 !important; /* Zauzima sav prostor */
+    display: flex !important;
+    align-items: center !important;
+    height: 50px !important; /* FIKSNA VISINA */
+    background: #0f0f0f !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    padding: 0 10px !important;
+    margin: 0 !important; /* Reset margina */
+}
+
+/* Ikonica i Input unutra */
+.search-container i.fa-search {
+    margin-right: 10px !important;
+    color: var(--accent);
+}
+
+.search-container input {
+    height: 100% !important; /* Puna visina kontejnera */
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+    width: 100% !important;
+    box-shadow: none !important; /* Sklanjamo stari glow */
+}
+
+/* Zvonce dugme */
+.search-container button {
+    height: 36px !important;
+    width: 36px !important;
+    margin-left: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 3. Sort Kontejner (Desno) */
+.sort-container {
+    width: 200px !important; /* Fiksna širina */
+    height: 50px !important; /* ISTA VISINA KAO SEARCH */
+    margin: 0 !important;
+}
+
+.sort-container select {
+    width: 100% !important;
+    height: 100% !important; /* Puna visina */
+    background: #0f0f0f !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    padding: 0 15px !important;
+    cursor: pointer !important;
+    color: #fff !important;
+    outline: none !important;
+    
+    /* Poravnanje teksta vertikalno */
+    display: flex;
+    align-items: center;
+}
+
+/* Hover efekti da budu isti */
+.search-container:focus-within,
+.sort-container select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.15) !important;
+}
+
+/* --- MOBILNI PRIKAZ (JEDNO ISPOD DRUGOG) --- */
+@media screen and (max-width: 768px) {
+    .search-sort-wrapper {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    .search-container, .sort-container {
+        width: 100% !important;
+    }
+}
+
+
+
+
+
+
+/* =======================================================
+   💻 ULTRA-COMPACT DESKTOP - SAMO ZA KOMPJUTER
+   Nalepi ovo na sam kraj style.css za sitniji izgled
+   ======================================================= */
+@media screen and (min-width: 769px) {
+    /* Gušći grid - više manjih kockica u redu */
+    .grid-container, #all-products-container, #latest-container {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+        gap: 15px !important;
+        padding: 20px 3% !important;
+    }
+
+    /* Smanjena visina kartice sa 420px na 360px */
+    .product-card, #latest-container .product-card {
+        height: 360px !important; 
+        min-height: 360px !important;
+        max-width: 100% !important;
+    }
+
+    /* Smanjena slika sa 200px na 160px */
+    .card-image-container, #latest-container .card-image-container {
+        height: 160px !important;
+    }
+
+    /* Smanjeni fontovi i razmaci unutra */
+    .product-info {
+        padding: 10px !important;
+    }
+
+    .product-info h3 {
+        font-size: 0.95rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    .product-info .price {
+        font-size: 1.1rem !important;
+        margin-bottom: 6px !important;
+    }
+
+    /* Smanjeni dugmići da prate kompaktnost */
+    .card-actions-row {
+        gap: 5px !important;
+    }
+
+    .btn-contact {
+        font-size: 0.85rem !important;
+        height: 35px !important;
+    }
+
+    .btn-icon {
+        height: 35px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+
+/* =======================================================
+   💻 SAMO ZA DESKTOP - UNIFORMISANJE I PROSTOR NA DNU
+   ======================================================= */
+@media screen and (min-width: 769px) {
+
+    /* 1. Izjednačavanje dimenzija svih kontejnera (Index i Berza) */
+    .grid-container, 
+    #all-products-container, 
+    #latest-container {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+        gap: 20px !important;
+        padding: 20px 5% !important;
+        overflow-x: visible !important; /* Onemogućava horizontalni skrol na indexu */
+        flex-wrap: wrap !important;
+        align-items: stretch !important;
+    }
+
+    /* 2. Forsiranje identičnih dimenzija za sve kartice */
+    .product-card, 
+    #latest-container .product-card {
+        height: 380px !important; /* Fiksna visina za sve */
+        min-height: 380px !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        background: #0f0f0f !important;
+        border: 1px solid #222 !important;
+        margin-bottom: 0 !important;
+        /* --- PROSTOR NA DNU --- */
+        padding-bottom: 25px !important; 
+    }
+
+    /* 3. Slika uvek istih proporcija */
+    .card-image-container, 
+    #latest-container .card-image-container {
+        height: 160px !important;
+        width: 100% !important;
+        flex-shrink: 0 !important;
+        border-bottom: 1px solid #222 !important;
+        border-right: none !important;
+    }
+
+    /* 4. Raspored informacija i dugmića */
+    .product-info {
+        padding: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+    }
+
+    /* Gura dugmiće ka dnu, ostavljajući prostor definisan u .product-card paddingu */
+    .card-actions-row, 
+    #latest-container .card-actions-row {
+        margin-top: auto !important; 
+        display: flex !important;
+        gap: 8px !important;
+        padding: 0 !important;
+    }
+
+    /* Sređivanje naslova da ne kvari visinu */
+    .product-info h3 {
+        font-size: 1rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        margin-bottom: 5px !important;
+    }
+}
+
+
+/* =======================================================
+   👻 DUH U KORPI (ANIMACIJA)
+   ======================================================= */
+.empty-cart-ghost {
+    text-align: center;
+    padding: 50px 20px;
+    color: #666;
+}
+
+.empty-cart-ghost i {
+    font-size: 5rem; /* Veliki duh */
+    color: #222;     /* Tamna boja */
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.1); /* Blagi sjaj */
+    
+    /* Animacija */
+    animation: floatGhost 3s ease-in-out infinite;
+}
+
+.empty-cart-ghost h3 {
+    font-family: 'Nulshock';
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+/* Kretanje gore-dole */
+@keyframes floatGhost {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); } /* Ide gore */
+    100% { transform: translateY(0); }
+}
+
+
+/* =======================================================
+   💀 SKELETON LOADING (PULSIRAJUĆE KOCKICE)
+   ======================================================= */
+@keyframes skeleton-pulse {
+    0% { background-color: #111; border-color: #222; }
+    50% { background-color: #1a1a1a; border-color: #333; }
+    100% { background-color: #111; border-color: #222; }
+}
+
+.skeleton-card {
+    display: flex;
+    flex-direction: column; /* Desktop default */
+    background: #0f0f0f;
+    border: 1px solid #222;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 380px; /* Ista visina kao prave kartice */
+    animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-img {
+    width: 100%;
+    height: 160px;
+    background: #1a1a1a;
+}
+
+.skeleton-info {
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.skeleton-line {
+    height: 15px;
+    background: #1a1a1a;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.skeleton-line.short { width: 40%; }
+.skeleton-line.price { height: 25px; width: 60%; margin-top: 5px; }
+
+/* Mobilni (Traka) */
+@media screen and (max-width: 768px) {
+    .skeleton-card {
+        flex-direction: row;
+        height: 115px;
+    }
+    .skeleton-img {
+        width: 115px;
+        height: 100%;
+    }
+}
+
+
+
+/* --- FIX ZA MODAL ZA OCENJIVANJE (DA NE BUDE OGROMAN) --- */
+
+/* 1. Glavni omotač - CENTRIRANJE */
+#review-modal {
+    align-items: center !important;     /* Vertikalno centriranje */
+    justify-content: center !important; /* Horizontalno centriranje */
+    padding: 0 !important;
+}
+
+/* Forsiramo flex prikaz kada se modal otvori */
+#review-modal[style*="display: block"] {
+    display: flex !important; 
+}
+
+/* 2. Sama kutija (Smanjujemo je) */
+#review-modal .contact-modal-content {
+    width: 90% !important;           /* Ne šire od 90% ekrana */
+    max-width: 320px !important;     /* Ograničavamo maksimalnu širinu */
+    margin: 0 !important;            /* Poništavamo margine koje ga gure gore */
+    padding: 25px 20px !important;   /* Manji padding unutra */
+    
+    position: relative !important;   /* Reset pozicije */
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    
+    border-radius: 12px !important;  /* Lepo zaobljeno */
+    background: #111 !important;     /* Tamna pozadina */
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.15) !important; /* Zlatni sjaj */
+}
+
+/* 3. Naslov unutra */
+#review-modal h2 {
+    font-size: 1.2rem !important;    /* Malo manji naslov */
+    margin-bottom: 15px !important;
+}
+
+/* 4. Zvezdice */
+#star-container {
+    font-size: 1.5rem !important;    /* Smanjujemo zvezdice da stanu u red */
+    margin-bottom: 15px !important;
+}
+
+/* 5. Polje za tekst */
+#review-comment {
+    font-size: 0.9rem !important;
+    height: 80px !important;         /* Manja visina polja */
+}
+
+/* 6. X Dugme (Malo ga pomeramo da ne smeta) */
+#review-modal .close-modal {
+    width: 35px !important;
+    height: 35px !important;
+    font-size: 20px !important;
+    top: 10px !important;
+    right: 10px !important;
+    background: #000 !important;
+    border: 1px solid #ff4d4d !important;
+}
+
+
+/* --- GLOBALNI PREMIUM VERIFIED EFEKAT --- */
+.fa-check-circle {
+    color: #FFD700 !important; /* Čisto Zlato */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6) !important; /* Jaki sjaj */
+    animation: goldPulse 2s infinite alternate; /* Animacija disanja */
+}
+
+@keyframes goldPulse {
+    from { text-shadow: 0 0 5px rgba(255, 215, 0, 0.4); transform: scale(1); }
+    to { text-shadow: 0 0 15px rgba(255, 215, 0, 0.8); transform: scale(1.1); }
+}
+
+
+/* --- FINALNI FIX ZA MOBILNI (KOMPAKTNIJE - 170px) --- */
+@media screen and (max-width: 768px) {
+    
+    /* 1. SMANJUJEMO VISINU NA 170px (Bilo je 185px) */
+    .product-card, #latest-container .product-card {
+        height: 170px !important;       
+        min-height: 170px !important;
+        align-items: stretch !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* 2. SLIKA PRATI VISINU */
+    .card-image-container, #latest-container .card-image-container {
+        height: auto !important;
+        min-height: 100% !important;     
+        width: 130px !important; /* Malo uža slika da prati proporciju */         
+    }
+
+    /* 3. OPIS SE VIDI (MAX 2 REDA) */
+    .product-info p {
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important; 
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        
+        font-size: 0.7rem !important; /* Za nijansu sitniji font */
+        color: #bbb !important;
+        margin: 3px 0 !important;     /* Manji razmaci */
+        line-height: 1.2 !important;
+        white-space: normal !important;
+        flex-shrink: 1 !important;       
+    }
+
+    /* 4. OSTALI ELEMENTI - SITNIJE */
+    .product-info h3 { margin-bottom: 2px !important; }
+    .product-info .price { margin-bottom: 2px !important; }
+    .seller-row { margin-bottom: 2px !important; padding-bottom: 5px !important; }
+
+    /* 5. DUGMIĆI FIKSIRANI NA DNU */
+    .card-actions-row {
+        margin-top: auto !important;     
+        padding: 5px 0 5px 0 !important; /* Manji padding */
+        flex-shrink: 0 !important;       
+        border-top: 1px solid #222 !important;
+    }
+}
+
+
+/* --- MODERN MOBILE HERO (CENTRIRANO & UREDNO) --- */
+@media screen and (max-width: 768px) {
+    
+    /* 1. HERO PREKO CELOG EKRANA */
+    .hero {
+        height: 100dvh !important; 
+        display: flex !important;
+        align-items: center !important; /* Vraća tekst u SREDINU visine */
+        justify-content: center !important;
+        padding-bottom: 40px !important; /* Malo prostora od dna */
+        
+        /* Tamniji i jači gradijent preko cele slike da tekst iskoči */
+        background: linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.8), #050505), 
+                    url('https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?q=80&w=1920&auto=format&fit=crop') !important;
+        background-size: cover !important;
+        background-position: center center !important;
+    }
+
+    /* 2. CENTRIRAN SADRŽAJ */
+    .hero-content {
+        width: 100% !important;
+        padding: 0 25px !important;
+        text-align: center !important; /* Sve u centar */
+        margin-top: 60px !important;    /* Spušta ga malo da ne pokrije kuler na slici */
+    }
+
+    /* 3. NASLOV (VELIKI I MOĆAN) */
+    .hero h1 {
+        font-size: 3rem !important; /* Još veći font */
+        line-height: 1.1 !important;
+        margin-bottom: 15px !important;
+        text-align: center !important;
+        text-shadow: 0 0 30px rgba(0,0,0,0.8) !important; /* Jaka senka za čitljivost */
+    }
+
+    /* 4. OPIS */
+    .hero p {
+        font-size: 1rem !important;
+        color: #ddd !important;
+        margin: 0 auto 35px auto !important; /* Centrira blok teksta */
+        text-align: center !important;
+        max-width: 90% !important;
+        line-height: 1.5 !important;
+    }
+
+    /* 5. DUGME (ŠIROKO ALI NE DO IVICE) */
+    .cta-button {
+        display: block !important;
+        width: 100% !important;
+        max-width: 300px !important; /* Ograničena širina da izgleda elegantnije */
+        margin: 0 auto !important;   /* Centrira dugme */
+        padding: 16px 0 !important;
+        font-size: 1.1rem !important;
+        background: var(--accent) !important;
+        color: #000 !important;
+        border-radius: 50px !important; /* Zaobljeno (modernije) */
+        box-shadow: 0 0 25px rgba(0, 255, 136, 0.4) !important;
+    }
+    
+    /* 6. POKRETNA STRELICA NA DNU (POZIV NA AKCIJU) */
+    .hero::after {
+        content: '\f107'; 
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--accent);
+        font-size: 1.8rem;
+        opacity: 0.8;
+        animation: bounceArrow 2s infinite;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Dozvoli da redovi budu jedni pored drugih */
+    .form-row {
+        flex-direction: row !important; /* Vraća ih u isti red */
+        gap: 10px !important; /* Mali razmak između */
+    }
+
+    /* Ali Kategorija i Proizvođač su možda preširoki za jedan red, pa njih ostavi jedno ispod drugog ako želiš */
+    /* Ako želiš da i oni budu 50-50, ne diraj ništa. Ako želiš da budu jedan ispod drugog, dodaj klasu .stack-mobile u HTML i ovo: */
+    .stack-mobile {
+        flex-direction: column !important;
+    }
+}
+
+/* Smanjujemo labele samo na formi */
+.form-group label {
+    font-size: 0.8rem !important; /* Manja slova */
+    margin-bottom: 4px !important; /* Manji razmak do inputa */
+    color: #888 !important; /* Malo sivkasto da ne "vrišti" */
+}
+
+/* --- WIZARD FORM STILOVI (STEP-BY-STEP) --- */
+
+/* Sakrij sve korake po defaultu */
+.form-step {
+    display: none;
+    animation: fadeInStep 0.5s ease;
+}
+
+/* Prikaži samo aktivni korak */
+.form-step.active-step {
+    display: block;
+}
+
+@keyframes fadeInStep {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dugmići za navigaciju */
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.next-step-btn {
+    flex: 2;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Nulshock';
+    letter-spacing: 1px;
+}
+
+.prev-step-btn {
+    flex: 1;
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Nulshock';
+}
+
+/* Progress Bar (Traka na vrhu) */
+.step-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #222;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.step-progress-fill {
+    height: 100%;
+    width: 33%; /* Počinje na 33% */
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    transition: width 0.3s ease;
+}
+
+/* Fix za naslove koraka na mobilnom */
+.form-step h3 {
+    font-size: 1.2rem;
+    font-family: 'Nulshock';
+    letter-spacing: 1px;
+}
+
+
+/* Popravka za modal ocenjivanja na mobilnom */
+@media screen and (max-width: 768px) {
+    #review-modal .contact-modal-content {
+        margin: 0 auto !important;
+        width: 90% !important;
+        max-width: 320px !important;
+        padding: 20px !important;
+        height: auto !important; /* Da ne bude rupa na dnu */
+    }
+    
+    #star-container {
+        font-size: 1.5rem !important; /* Manje zvezdice na telefonu */
+    }
+}
+
+
+
+/* --- WIZARD FORM LOGIKA (SAKRIVANJE KORAKA) --- */
+
+/* 1. Sakrij sve korake po defaultu */
+.form-step {
+    display: none; 
+    animation: fadeInStep 0.4s ease;
+}
+
+/* 2. Prikaži samo onaj koji ima klasu 'active-step' */
+.form-step.active-step {
+    display: block !important;
+}
+
+/* Animacija za lepši prelaz između koraka */
+@keyframes fadeInStep {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stil za dugmiće navigacije (Next/Back) */
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.next-step-btn {
+    flex: 2;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Nulshock';
+}
+
+.prev-step-btn {
+    flex: 1;
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* Progress Bar (Zelena linija na vrhu forme) */
+.step-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #222;
+    margin-bottom: 10px;
+    border-radius: 2px;
+}
+
+.step-progress-fill {
+    height: 100%;
+    width: 33.3%; /* Početna širina za 1. korak */
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    transition: width 0.3s ease;
+}
+
+
+/* =========================================
+   🧙‍♂️ WIZARD FORM STILOVI (OBAVEZNO!)
+   ========================================= */
+
+/* 1. Sakrij sve korake po defaultu */
+.form-step {
+    display: none !important;
+}
+
+/* 2. Prikaži SAMO onaj koji ima klasu 'active-step' */
+.form-step.active-step {
+    display: block !important;
+    animation: fadeInWizard 0.4s ease;
+}
+
+@keyframes fadeInWizard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dugmići za navigaciju (DALJE / NAZAD) */
+.nav-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.next-step-btn, .prev-step-btn {
+    padding: 15px;
+    font-family: 'Nulshock', sans-serif;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.next-step-btn {
+    flex: 2;
+    background: var(--accent);
+    color: #000;
+    border: none;
+}
+
+.prev-step-btn {
+    flex: 1;
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+}
+
+/* Progress Bar (Zelena linija na vrhu) */
+.step-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #1a1a1a;
+    margin-bottom: 8px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.step-progress-fill {
+    height: 100%;
+    width: 33%; /* Menja se kroz JS */
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    transition: width 0.3s ease;
+}
+
+
+/* --- WIZARD FORM FIX (OBAVEZNO) --- */
+
+/* 1. Sakrij sve korake po defaultu */
+.form-step {
+    display: none !important;
+}
+
+/* 2. Prikaži SAMO aktivni korak */
+.form-step.active-step {
+    display: block !important;
+    animation: fadeInWizard 0.5s ease;
+}
+
+/* Animacija pojave */
+@keyframes fadeInWizard {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dugmići za navigaciju */
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.next-step-btn {
+    flex: 2;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Nulshock';
+}
+
+.prev-step-btn {
+    flex: 1;
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    padding: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+
+
+/* =========================================================
+   🧙‍♂️ WIZARD FORM LOGIC - FORCE HIDE
+   ========================================================= */
+
+/* 1. SAKRIJ SVE KORAKE (Jako pravilo) */
+#oglas-form .form-step {
+    display: none !important; 
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 2. PRIKAŽI SAMO AKTIVNI KORAK */
+#oglas-form .form-step.active-step {
+    display: block !important;
+    opacity: 1;
+    animation: fadeInStep 0.4s ease forwards;
+}
+
+@keyframes fadeInStep {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. STIL ZA DUGMIĆE (Da ne budu slepljeni) */
+.nav-buttons {
+    display: flex !important;
+    gap: 15px !important;
+    margin-top: 25px !important;
+    width: 100% !important;
+}
+
+/* Dugme DALJE */
+.next-step-btn {
+    flex: 2 !important;
+    background: var(--accent) !important;
+    color: #000 !important;
+    border: none !important;
+    padding: 15px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    font-family: 'Nulshock', sans-serif !important;
+    font-size: 1.1rem !important;
+}
+
+/* Dugme NAZAD */
+.prev-step-btn {
+    flex: 1 !important;
+    background: transparent !important;
+    color: #888 !important;
+    border: 1px solid #444 !important;
+    padding: 15px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    border-radius: 4px !important;
+    font-family: 'Nulshock', sans-serif !important;
+}
+
+/* Traka napretka (Zelena linija) */
+.step-progress-bar {
+    width: 100% !important;
+    height: 4px !important;
+    background: #111 !important;
+    margin-bottom: 15px !important;
+    border-radius: 2px !important;
+    overflow: hidden !important;
+}
+
+.step-progress-fill {
+    height: 100% !important;
+    width: 33% !important; /* Počinje na prvoj trećini */
+    background: var(--accent) !important;
+    box-shadow: 0 0 10px var(--accent) !important;
+    transition: width 0.4s ease !important;
+}
+
+/* =========================================================
+   🛠️ WIZARD KORAK 3 FIX (DUGMIĆI NAZAD I POSTAVI)
+   ========================================================= */
+
+#oglas-form .nav-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 15px !important;
+    align-items: stretch !important; /* Prisiljava ih da budu iste visine */
+    margin-top: 25px !important;
+}
+
+#oglas-form .submit-btn-glow {
+    margin-top: 0 !important;       /* Uklanja stari razmak zbog kog je propadalo dole */
+    padding: 15px 10px !important;  /* Normalan padding umesto ogromnog */
+    font-size: 1.1rem !important;   /* Prilagođena veličina fonta */
+    clip-path: none !important;     /* Uklanja kosi rez koji lomi dizajn u flexu */
+    border-radius: 4px !important;  /* Vraća kockaste ivice da se slaže sa "NAZAD" */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3) !important;
+}
+
+#oglas-form .prev-step-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px 10px !important;
+}
+
+/* Na veoma uskim telefonima (ispod 400px), stavićemo ih jedno ispod drugog za najbolji UX */
+@media screen and (max-width: 400px) {
+    #oglas-form .nav-buttons {
+        flex-direction: column-reverse !important; /* NAZAD ide dole, DALJE/POSTAVI ide gore */
+        gap: 10px !important;
+    }
+}
+
+
+
+/* =======================================================
+   ✨ ZLATNI SJAJ ZA VERIFIKOVANE PRODAVCE
+   ======================================================= */
+.seller-row .fa-check-circle {
+    color: gold !important;
+    /* Pravi zlatni odsjaj oko ikonice */
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) !important;
+    /* Blago pulsiranje da privuče pažnju */
+    animation: goldPulse 2s infinite alternate !important;
+}
+
+@keyframes goldPulse {
+    from { filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.4)); }
+    to { filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1)); }
+}
+
+
+
+
+/* =======================================================
+   🔧 FIX ZA PREDUGAČKE CENE I TEKSTOVE (ANTI-SPAM)
+   ======================================================= */
+
+.product-info .price {
+    white-space: nowrap !important; /* Zabranjuje prelazak cene u drugi red */
+    overflow: hidden !important;    /* Seče sve brojeve koji vire van kartice */
+    text-overflow: ellipsis !important; /* Stavlja tri tačke (...) ako je broj predugačak */
+    max-width: 100% !important;     /* Osigurava da ne probije širinu kontejnera */
+    display: block !important;
+}
+
+/* Opciono osiguranje za mobilni prikaz da tekst ne pobegne */
+@media screen and (max-width: 768px) {
+    .product-info {
+        min-width: 0 !important; 
+        overflow: hidden !important;
+    }
+}
+
+
+
+
+
+/* =========================================
+   ⭐ FENSI TEXTBOX ZA KOMENTARE
+========================================= */
+
+/* Osnovni izgled polja */
+.fensi-textbox {
+    width: 100%;
+    padding: 15px;           /* Malo više prostora unutra */
+    background: #0f0f0f;     /* Jako tamna pozadina */
+    border: 1px solid #333;  /* Suptilna siva ivica */
+    color: #eee;             /* Skoro bela boja teksta */
+    border-radius: 10px;     /* Zaobljenije ivice */
+    outline: none;           /* Sklanja ružni plavi okvir pregledača */
+    margin-bottom: 25px;
+    resize: vertical;        /* Dozvoljava samo menjanje visine */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    box-shadow: inset 0 3px 6px rgba(0,0,0,0.5); /* Unutrašnja senka za dubinu */
+    transition: all 0.3s ease; /* Lepa animacija kad se klikne */
+}
+
+/* Izgled KADA KORISNIK KLIKNE UNUTRA (Fokus) */
+.fensi-textbox:focus {
+    border-color: gold;      /* Ivica postaje zlatna */
+    background: #141414;     /* Pozadina postaje malo svetlija */
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.25); /* Zlatni sjaj oko polja! */
+    transform: translateY(-2px); /* Malo se podigne na gore */
+}
+
+/* Izgled teksta "placeholder" (ono što piše dok je prazno) */
+.fensi-textbox::placeholder {
+    color: #555;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+/* Kad klikneš, placeholder posvetli */
+.fensi-textbox:focus::placeholder {
+    color: #888;
+}
+
+
+
+/* =========================================
+   STRANICA POJEDINAČNOG OGLASA
+========================================= */
+@media (max-width: 900px) {
+    #single-ad-content {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.thumbnail-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: 0.3s;
+    opacity: 0.6;
+}
+
+.thumbnail-img:hover, .thumbnail-img.active {
+    border-color: var(--accent);
+    opacity: 1;
+}
+
+#btn-contact:hover {
+    background: #333 !important;
+}
+
+
+/* =======================================================
+   🛒 FIX ZA BEDŽ KORPE U MOBILNOM MENIJU
+   ======================================================= */
+@media screen and (max-width: 768px) {
+    /* Skupljamo link samo oko ikonice da se ne širi do ivice ekrana */
+    .nav-links li a[href="korpa.html"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        margin: 0 auto !important;
+        padding-right: 15px !important; /* Pravimo malo mesta za bedž */
+    }
+    
+    /* Vraćamo crvenu tačkicu nazad na ekran */
+    #cart-count-badge {
+        right: -5px !important; /* Vraća bedž levo */
+        top: 2px !important;    /* Spušta ga malo da lepše stoji */
+    }
+}
+
+
+/* =======================================================
+   📱 FINALNI FIX ZA MOBILNI MENI (KORPA I VISINA)
+   ======================================================= */
+@media screen and (max-width: 768px) {
+    
+    /* 1. REŠAVANJE ODSEČENOG DNA (Omogućava skrolovanje menija) */
+    .nav-links {
+        overflow-y: auto !important;  /* Ako ne stane na ekran, može da se skrola! */
+        padding-bottom: 40px !important; /* Dodaje prostor na dnu da ne bude zalepljeno */
+    }
+    
+    .login-item {
+        margin-bottom: 10px !important; /* Smanjili smo ogromnu marginu koja je gurala dugmiće van ekrana */
+        margin-top: 20px !important;
+    }
+
+    /* 2. VRAĆANJE KORPE U CENTAR */
+    .nav-links a[href="korpa.html"] {
+        display: inline-flex !important; /* Naređuje linku da se "skupi" oko ikonice */
+        width: auto !important;          /* Skida onih 100% širine */
+        margin: 0 auto !important;       /* Centrira smanjeni link */
+        padding: 10px 20px !important;   /* Pravi mu malo mesta sa strane */
+        position: relative !important;
+    }
+    
+    #cart-count-badge {
+        right: 0 !important;      /* Sada je tačkica vezana za ikonicu, a ne za ivicu ekrana! */
+        top: 0 !important;
+        transform: scale(1.1);    /* Malo ćemo je povećati da se bolje vidi */
+    }
+}
+
+
+
+
+/* =======================================================
+   ⬇️ PRECIZNO POZICIONIRANJE DUGMIĆA NA KARTICI
+   ======================================================= */
+
+/* DESKTOP EKRANI */
+@media screen and (min-width: 769px) {
+    .product-card, 
+    #latest-container .product-card {
+        padding-bottom: 18px !important; /* Prostor ISPOD dugmića (od donje ivice kartice) */
+    }
+    .card-actions-row, 
+    #latest-container .card-actions-row {
+        margin-top: auto !important;  /* Naređuje im da idu na dno */
+        padding-top: 15px !important; /* Prostor IZNAD dugmića (odvaja ih od teksta) */
+    }
+}
+
+/* MOBILNI TELEFONI */
+@media screen and (max-width: 768px) {
+    .product-card, 
+    #latest-container .product-card {
+        padding-bottom: 8px !important; /* Prostor ISPOD dugmića na telefonu */
+    }
+    .card-actions-row, 
+    #latest-container .card-actions-row {
+        margin-top: auto !important;
+        padding-top: 10px !important; /* Prostor IZNAD dugmića na telefonu */
+    }
+}
+
+
+/* =======================================================
+   ✨ MEGA PROMO CENA - ZLATNA VERZIJA
+   ======================================================= */
+@keyframes mega-glow-gold {
+    0% {
+        text-shadow: 0 0 10px gold, 0 0 20px gold;
+        transform: scale(1);
+        color: gold;
+    }
+    50% {
+        /* Intenzivniji zlatni sjaj i blago povećanje */
+        text-shadow: 0 0 20px gold, 0 0 30px gold, 0 0 40px #ffed4a;
+        transform: scale(1.05); 
+        color: #ffed4a; /* Malo svetlija nijansa zlata u piku */
+    }
+    100% {
+        text-shadow: 0 0 10px gold, 0 0 20px gold;
+        transform: scale(1);
+        color: gold;
+    }
+}
+
+.mega-promo-price-gold {
+    /* Primenjujemo novu zlatnu animaciju */
+    animation: mega-glow-gold 2s infinite alternate ease-in-out;
+}
+
+
+
+/* =========================================
+   GALERIJA THUMBNAILS (MOBILE FIX) 📱
+   ========================================= */
+#ad-thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    
+    /* KLJUČNO: Ovo sprečava širenje stranice */
+    width: 100%; 
+    overflow-x: auto; /* Dozvoljava skrolovanje levo-desno */
+    white-space: nowrap;
+    
+    /* Lepota skrolovanja */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; /* Glatko na iPhone-u */
+    
+    /* Malo prostora da se ne seku senke */
+    padding-bottom: 10px; 
+}
+
+.thumbnail-img {
+    width: 80px;  /* Fiksna širina sličice */
+    height: 80px; /* Fiksna visina */
+    object-fit: cover; /* Da se slika ne razvuče */
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+    
+    /* KLJUČNO: Da se ne skupljaju */
+    flex-shrink: 0; 
+    scroll-snap-align: start;
+}
+
+.thumbnail-img.active {
+    border-color: var(--accent);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Skrivanje scrollbara da bude lepše (opciono) */
+#ad-thumbnails::-webkit-scrollbar {
+    height: 4px;
+}
+#ad-thumbnails::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+
+
+/* =======================================================
+   🚑 FIX ZA POJEDINAČNI OGLAS (DA SLIKE NE LOME EKRAN)
+   ======================================================= */
+
+/* 1. Glavni Grid kontejner */
+#single-ad-content {
+    max-width: 100vw; /* Ne sme biti šire od ekrana */
+    overflow: hidden; /* Odseca sve što viri */
+    box-sizing: border-box;
+}
+
+/* 2. Fix za mobilni prikaz (Grid itemi) */
+@media (max-width: 900px) {
+    #single-ad-content {
+        display: block !important; /* Sklanjamo Grid na mobilnom da izbegnemo probleme */
+        padding: 0 !important;
+    }
+
+    /* Leva i desna kolona (slike i info) */
+    #single-ad-content > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important; /* MAGIJA: Dozvoljava skupljanje kontejnera */
+        box-sizing: border-box !important;
+    }
+    
+    /* Dodajemo padding na tekst delu da ne lepi za ivice */
+    .ad-details-container, .info-section { /* Pretpostavljam klasu, ali ovo hvata divove */
+        padding: 15px !important;
+    }
+}
+
+/* 3. Thumbnails traka (Slike ispod glavne) */
+#ad-thumbnails {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Nikad ne prelamaj u novi red */
+    gap: 10px;
+    margin-top: 15px;
+    
+    /* --- OVO REŠAVA PROBLEM --- */
+    width: 100% !important;
+    max-width: 100vw !important; /* Tvrdi limit širine */
+    overflow-x: auto !important; /* Dozvoli skrolovanje */
+    
+    /* Da skrol radi glatko */
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 5px; /* Mesto za scrollbar ako se pojavi */
+}
+
+/* Osiguravamo da slike ne budu spljeskane */
+.thumbnail-img {
+    flex: 0 0 auto !important; /* Ne dozvoli skupljanje niti širenje */
+    width: 80px !important;
+    height: 80px !important;
+    scroll-snap-align: start;
+    margin-right: 5px; /* Mali razmak */
+}
+
+
+/* =========================================
+   GALERIJA THUMBNAILS (MOBILE FIX - FINAL) 📱
+   ========================================= */
+#ad-thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    
+    /* OGRANIČENJE ŠIRINE I POZICIONIRANJE */
+    width: 100%;
+    max-width: 100%; /* Osigurava da ne prelazi širinu roditelja */
+    padding: 0 5px 10px 5px; /* Dodaje malo lufta sa strane i dole */
+    box-sizing: border-box; /* Uračunava padding u širinu */
+    
+    /* SKROLOVANJE */
+    overflow-x: auto; /* Omogućava horizontalno skrolovanje */
+    white-space: nowrap;
+    
+    /* LEPOTA SKROLOVANJA */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    
+    /* SAKRIVANJE SCROLLBAR-A (Opciono, ali lepše) */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Sakrivanje scrollbara za Chrome/Safari */
+#ad-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+.thumbnail-img {
+    width: 70px;  /* Malo manje sličice za mobilni da ih stane više */
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+    
+    /* FIKSIRANJE VELIČINE */
+    flex-shrink: 0; 
+    scroll-snap-align: start;
+}
+
+.thumbnail-img.active {
+    border-color: var(--accent);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* --- MEDIA QUERY ZA VEĆE EKRANE (Vraća veće slike) --- */
+@media screen and (min-width: 769px) {
+    .thumbnail-img {
+        width: 80px;
+        height: 80px;
+    }
+}
+/* =======================================================
+   ✅ FINALNI FIX DIMENZIJA (DESKTOP & MOBILE)
+   ======================================================= */
+
+/* 💻 DESKTOP: VEĆA KARTICA + LUFT NA DNU */
+@media screen and (min-width: 769px) {
+    .product-card, 
+    #latest-container .product-card {
+        /* Povećavamo visinu sa 380px na 420px da sve stane komotno */
+        height: 420px !important; 
+        min-height: 420px !important;
+        
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        
+        /* OVO PRAVI LUFT NA DNU (Sigurna zona) */
+        padding-bottom: 20px !important; 
+        overflow: hidden !important;
+    }
+
+    /* Info deo se širi da popuni prazninu */
+    .product-info {
+        padding: 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important; /* Zauzmi sav prostor do dna */
+    }
+
+    /* Dugmići se lepe za dno svog kontejnera */
+    .card-actions-row {
+        margin-top: auto !important; 
+        padding-top: 15px !important; /* Odvaja dugmiće od teksta iznad */
+    }
+}
+
+/* 📱 MOBILE: OPTIMIZOVAN PROSTOR */
+@media screen and (max-width: 768px) {
+    .product-card, 
+    #latest-container .product-card {
+        /* Povećavamo visinu na 180px da dugmići ne budu zgnječeni */
+        height: 180px !important;       
+        min-height: 180px !important;
+        padding-bottom: 0 !important;
+        align-items: stretch !important;
+    }
+
+    .product-info {
+        padding: 8px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        min-width: 0 !important;
+    }
+
+    /* Smanjujemo fontove malo da sve stane */
+    .product-info h3 { 
+        font-size: 0.9rem !important; 
+        margin-bottom: 2px !important;
+    }
+    
+    /* Opis max 2 reda */
+    .product-info p {
+        -webkit-line-clamp: 2 !important;
+        margin: 2px 0 5px 0 !important;
+    }
+
+    /* Dugmići */
+    .card-actions-row {
+        margin-top: auto !important; /* Gura na dno */
+        padding-top: 5px !important;
+        padding-bottom: 5px !important; /* Mali luft od ivice */
+        border-top: 1px solid #222 !important;
+    }
+}
+
+
+/* =======================================================
+   🚑 HITNA POPRAVKA ZA DESKTOP (SA VIŠE LUFTA NA DNU)
+   ======================================================= */
+
+@media screen and (min-width: 769px) {
+    /* 1. FIKSIRAMO KARTICU + DODAJEMO LUFT */
+    .product-card, #latest-container .product-card {
+        height: 395px !important;      /* Povećano sa 380px na 395px (da ima mesta) */
+        min-height: 395px !important;
+        max-height: 395px !important;
+        
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        
+        /* 🔥 OVO JE TAJ LUFT NA DNU KOJI TRAŽIŠ */
+        padding-bottom: 30px !important; /* Povećano sa 20px na 30px */
+        
+        background: #0f0f0f !important;
+        overflow: hidden !important;
+    }
+
+    /* 2. PROSTOR ZA INFO */
+    .product-info {
+        padding: 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+        justify-content: space-between !important;
+    }
+
+    .info-top {
+        flex: 1; 
+    }
+
+    /* 3. NASLOV (2 reda) */
+    .card-title {
+        font-size: 1rem !important;
+        margin: 0 0 5px 0 !important;
+        line-height: 1.3 !important;
+        color: #fff !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        height: 2.6em !important;
+    }
+
+    /* 4. CENA I PRODAVAC */
+    .product-info .price { margin: 5px 0 !important; font-size: 1.2rem !important; font-weight: bold; color: var(--accent); }
+    .seller-row { margin-bottom: 10px !important; font-size: 0.8rem !important; }
+
+    /* 5. OPIS (2 reda) */
+    .card-desc {
+        font-size: 0.85rem !important;
+        color: #888 !important;
+        margin: 0 !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        height: 2.6em !important;
+    }
+
+    /* 6. DUGMIĆI (UVEK NA DNU SA RAZMAKOM IZNAD) */
+    .card-actions-row {
+        margin-top: auto !important;
+        padding-top: 20px !important; /* Dodatni luft iznad dugmića */
+        display: flex !important;
+        gap: 8px !important;
+    }
+}
+/* =======================================================
+   💎 PREMIUM INDEX TRAKA (STARI IZGLED + NOVI RASPORED)
+   ======================================================= */
+
+/* 1. DESKTOP: TAČNO 6 U REDU (BEZ RAZVLAČENJA) */
+@media screen and (min-width: 1024px) {
+    #latest-container {
+        display: grid !important;
+        grid-template-columns: repeat(6, 1fr) !important; 
+        gap: 15px !important;
+        width: 100% !important;
+        padding: 20px 0 !important;
+    }
+
+    #latest-container .product-card {
+        /* Vraćamo tvoju staru fiksnu visinu da bi sve bile iste */
+        height: 395px !important; 
+        min-height: 395px !important;
+        max-height: 395px !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Smanjujemo font samo mrvicu da bi 6 stalo u red */
+    #latest-container .card-title {
+        font-size: 0.85rem !important;
+        -webkit-line-clamp: 2 !important;
+    }
+    
+    #latest-container .price {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* 2. MOBILNI: TAČNO 1 KOLONA (4 VELIKE KARTICE) */
+@media screen and (max-width: 768px) {
+    #latest-container {
+        display: grid !important;
+        grid-template-columns: 1fr !important; /* Forsira jednu kolonu */
+        gap: 20px !important;
+        padding: 10px !important;
+    }
+
+    #latest-container .product-card {
+        /* Vraćamo prirodnu visinu za mobilni da ne bude lufta */
+        height: 400px !important; 
+        width: 100% !important;
+        max-width: 350px !important; /* Da ne bude preširoka na ekranu */
+        margin: 0 auto !important;
+    }
+}
+
+/* =========================================
+   📱 FINALNI FIX ZA DUGMIĆE NA TELEFONU
+   ========================================= */
+@media screen and (max-width: 768px) {
+    
+    /* 1. Kontejner za dugmiće - Pravimo razmak i centriramo */
+    .hero-buttons {
+        display: flex !important;
+        flex-direction: column !important; /* Jedno ispod drugog */
+        gap: 15px !important;              /* Lep razmak između dugmića */
+        width: 100% !important;
+        align-items: center !important;    /* Centrira ih horizontalno */
+        margin-top: 30px !important;       /* Odvaja ih od teksta iznad */
+        margin-bottom: 50px !important;    /* Odvaja ih od statistike ispod */
+    }
+
+    /* 2. Zajednički stil za OBA dugmeta (da budu blizanci) */
+    .hero-buttons .cta-button, 
+    .hero-buttons .cta-button-outline {
+        width: 85% !important;        /* 85% širine ekrana (izgleda elegantnije) */
+        max-width: 350px !important;  /* Ne dozvoli da budu preširoki na većim telefonima */
+        display: flex !important;
+        justify-content: center !important; /* Centrira tekst i ikonicu unutra */
+        align-items: center !important;
+        padding: 14px 0 !important;   /* Visina dugmeta (malo tanje nego pre) */
+        font-size: 1rem !important;
+        margin: 0 !important;         /* Resetuje stare margine */
+        border-radius: 50px !important; /* Eliptični oblik je moderniji */
+    }
+
+    /* 3. Specifično za Zeleno dugme (Sjaj) */
+    .hero-buttons .cta-button {
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3) !important;
+    }
+
+    /* 4. Specifično za Outline dugme (Pozadina) */
+    .hero-buttons .cta-button-outline {
+        background: rgba(0,0,0,0.5) !important; /* Tamna pozadina da se lakše čita */
+        backdrop-filter: blur(5px) !important;
+    }
+}
+
+
+
+/* =========================================
+   🚑 FIX ZA GLOBALNO 'CTA' DUGME (KORPA)
+   ========================================= */
+
+.cta-button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 35px !important;
+    background-color: var(--accent) !important;
+    color: #000 !important;
+    text-decoration: none !important;
+    font-weight: 800;
+    font-size: 1rem !important;
+    border: 2px solid var(--accent);
+    border-radius: 5px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2); 
+    cursor: pointer;
+}
+
+.cta-button:hover {
+    background-color: #fff !important;
+    border-color: #fff !important;
+    color: #000 !important;
+    box-shadow: 0 0 30px var(--accent);
+    transform: translateY(-3px);
+}
+
+/* Fix za mobilni u korpi (da ne bude preširoko) */
+@media screen and (max-width: 768px) {
+    .empty-cart-ghost .cta-button {
+        width: auto !important;
+        min-width: 200px;
+    }
+}
+
+
+
+/* =========================================
+   🚀 NEON SCROLL TO TOP DUGME
+   ========================================= */
+#scrollToTopBtn {
+    display: none; /* Skriveno po defaultu */
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999; /* Iznad svega */
+    width: 50px;
+    height: 50px;
+    border: none;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--accent); /* Neon zelena strelica */
+    cursor: pointer;
+    border-radius: 12px; /* Malo kockasto kao čip */
+    border: 1px solid var(--accent);
+    font-size: 1.2rem;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#scrollToTopBtn:hover {
+    background-color: var(--accent);
+    color: #000; /* Crna strelica na zelenom */
+    transform: translateY(-5px) scale(1.1); /* Skoči gore */
+    box-shadow: 0 0 30px var(--accent); /* Jaki sjaj */
+}
+
+/* Animacija ulaska */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#scrollToTopBtn.show {
+    display: block;
+    animation: fadeInUp 0.4s ease;
+}
+
+/* Prilagođavanje za mobilni (da ne smeta palcu) */
+@media (max-width: 768px) {
+    #scrollToTopBtn {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        background-color: rgba(0, 0, 0, 0.9); /* Tamnije na mobu */
+    }
+}
+
+/* =========================================
+   🚀 CYBERPUNK PRELOADER
+   ========================================= */
+#preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: #050505;
+    z-index: 99999; /* Iznad svega */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out, visibility 0.5s;
+}
+
+.loader-content {
+    text-align: center;
+    width: 300px;
+}
+
+.loader-logo {
+    width: 80px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 15px var(--accent));
+    animation: logoPulse 1.5s infinite alternate;
+}
+
+@keyframes logoPulse {
+    from { transform: scale(1); opacity: 0.8; }
+    to { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 25px var(--accent)); }
+}
+
+.loader-bar {
+    width: 100%;
+    height: 4px;
+    background: #111;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.loader-progress {
+    width: 0%;
+    height: 100%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: loadBar 2s ease-in-out forwards; /* Lažno punjenje */
+}
+
+@keyframes loadBar {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 100%; }
+}
+
+.loader-text {
+    color: var(--accent);
+    font-family: 'Nulshock', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    animation: blinkText 0.5s infinite alternate;
+}
+
+@keyframes blinkText {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+}
+
+/* Klasa za sakrivanje */
+body.loaded #preloader {
+    opacity: 0;
+    visibility: hidden;
+}
+/* =========================================
+   🔒 GEEKBIT GRID SYSTEM (FINALNI FIX)
+   ========================================= */
+
+/* 1. DEFINIŠEMO MREŽU (GRID) */
+.listing-actions {
+    display: grid !important;
+    /* Prva kolona 60px (korpa), Druga kolona 1fr (sve što ostane) */
+    grid-template-columns: 60px 1fr !important;
+    gap: 10px !important; /* Razmak između njih */
+    width: 100% !important;
+    padding: 0 5px !important; /* Mali padding da ne dodiruje ivice */
+    box-sizing: border-box !important;
+    margin: 20px 0 !important;
+    /* Poništavamo flex pravila ako su ostala */
+    flex-wrap: nowrap !important;
+}
+
+/* 2. KORPA - IDE U PRVU KOLONU */
+#dodajUKorpuBtn {
+    grid-column: 1 / 2 !important; /* Izričito prva kolona */
+    width: 100% !important;
+    height: 50px !important;
+    margin: 0 !important;
+    background: #111 !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 3. ZATRAŽI KUPOVINU - IDE U DRUGU KOLONU */
+/* Koristimo ID jer je on jači od klase .cta-button */
+#zatraziKupovinuBtn {
+    grid-column: 2 / 3 !important; /* Izričito druga kolona */
+    
+    /* OVO JE KLJUČNO - PONIŠTAVAMO ONIH 85% */
+    width: 100% !important; /* Popuni samo svoju ćeliju */
+    max-width: 100% !important;
+    
+    height: 50px !important;
+    margin: 0 !important;
+    background: var(--accent) !important;
+    color: #000 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important; /* Tekst u jednom redu */
+    
+    /* Resetujemo pozicije */
+    position: static !important;
+    transform: none !important;
+}
+
+/* 4. KONTAKT - IDE DOLE (PREKO OBE KOLONE) */
+.listing-actions > a, 
+.cta-button-outline,
+#kontaktirajProdavcaBtn {
+    grid-column: 1 / -1 !important; /* Proteže se od početka do kraja */
+    width: 100% !important;
+    height: 50px !important;
+    margin-top: 5px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* 5. SIGURNOST PROTIV SKROLOVANJA */
+@media screen and (max-width: 768px) {
+    body, html, .listing-details {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+}
+
+
+/* =========================================
+   🛡️ GLOBALNI DESKTOP FIX ZA DUGMAD
+   ========================================= */
+
+@media screen and (min-width: 769px) {
+    
+    /* 1. HERO SEKCIJA (Istraži ponudu + Postavi oglas) */
+    /* Gađamo samo dugmad u sredini, ne diramo navigaciju! */
+    .hero-content .cta-button,
+    .hero-content .cta-button-outline,
+    .hero-content [onclick*="idiNaPostavljanjeOglasa"] {
+        display: inline-flex !important; /* Drži ih u ISTOM redu */
+        width: fit-content !important;   /* Širi se samo oko teksta */
+        min-width: 220px !important;     /* Da budu iste širine */
+        height: 55px !important;         /* Ista visina */
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 10px !important;         /* Razmak između njih */
+        vertical-align: middle !important;
+    }
+
+    /* 2. SAMOSTALNA DUGMAD (Učitaj još, Pogledaj sve oglase) */
+    /* Gađamo tačne ID-jeve i linkove koji stoje sami na dnu sekcija */
+    #load-more-btn,
+    #admin-load-more,
+    a.cta-button-outline[href="komponente.html"], /* Često je ovo "Pogledaj sve oglase" */
+    .latest-ads-container + a.cta-button-outline {
+        display: flex !important;
+        width: fit-content !important;
+        min-width: 250px !important;
+        height: 55px !important;
+        padding: 0 40px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        
+        /* KLJUČNO ZA CENTRIRANJE: Auto margine ih guraju tačno na sredinu ekrana */
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+    }
+}

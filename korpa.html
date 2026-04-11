@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeekBit | Moja Korpa</title>
+    <meta property="og:title" content="GeekBit | Moja Korpa">
+    <meta property="og:description" content="Završite kupovinu hardvera i zakažite profesionalno sklapanje.">
+    <meta property="og:image" content="https://marketplace.geekbit.tech/assets/img/neon-logo1.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/neon-logo2.png">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <meta name="theme-color" content="#00ff88">
+    <link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo-container">
+            <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+            <span class="service-name">MARKETPLACE</span>
+        </a>
+        
+         <ul class="nav-links">
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="komponente.html">BERZA</a></li>
+            <li><a href="quicksell.html">Instant Otkup</a></li>
+            <li><a href="kalkulator.html">KALKULATOR</a></li>
+            <li><a href="#" onclick="idiNaPostavljanjeOglasa(event)">Prodaj</a></li>
+
+            <li id="admin-btn" style="display: none;">
+                <a href="admin.html" style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 10px; border-radius: 4px;">ADMIN</a>
+            </li>
+
+            <li id="my-ads-btn" style="display: none;">
+                <a href="profil.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">
+                    <i class="fas fa-layer-group"></i> MOJI OGLASI
+                </a>
+            </li>
+
+            <li>
+                <a href="korpa.html" style="color:var(--accent); position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.1rem;"></i> 
+                    <span id="cart-count-badge" style="
+                        background: var(--error); 
+                        color: white; 
+                        border-radius: 50%; 
+                        padding: 2px 5px; 
+                        font-size: 0.7rem; 
+                        position: absolute; 
+                        top: -8px; 
+                        right: -10px; 
+                        display: none;">0</span>
+                </a>
+            </li>
+
+            <li class="login-item" style="margin-left: 10px;">
+                
+                <a href="#" id="login-btn" onclick="prijaviSeGoogle(); return false;">
+                    <i class="fab fa-google"></i> PRIJAVI SE
+                </a>
+
+                <a href="profil.html" id="user-profile-btn" style="display: none; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 15px; border-radius: 20px; border: 1px solid #333;">
+                    <img id="user-avatar" src="assets/img/neon-logo1.png" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                    <span id="user-name" style="font-size: 0.9rem; color: #fff;"></span>
+                </a>
+
+                <a href="#" id="logout-btn" onclick="odjaviSe(); return false;" style="display: none; color: #666; margin-left: 5px; font-size: 1.1rem;" title="Odjavi se">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <main style="padding-top: 120px; min-height: 80vh;">
+        <div class="cart-container">
+            
+            <div class="cart-items-section">
+                <h1 style="font-family:'Nulshock'; margin-bottom:20px;">SAČUVANE KOMPONENTE</h1>
+                <div id="cart-items-list">
+                    <p>Vaša korpa je prazna.</p>
+                </div>
+            </div>
+
+            <div class="cart-summary-section">
+                <div class="summary-box">
+                    
+                    <div class="cart-summary">
+                        <h2 style="font-family: 'Nulshock'; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px;">
+                            PREGLED TROŠKOVA
+                        </h2>
+                    
+                        <div id="items-total" style="display: none;">0 €</div>
+                    
+                        <button onclick="proveriKompatibilnost()" class="btn-cyber-check">
+                            <i class="fas fa-microchip"></i> PROVERI KOMPATIBILNOST
+                        </button>
+                    
+<div class="service-option" style="border: 1px dashed var(--accent); padding: 15px; border-radius: 8px; margin-bottom: 20px; background: rgba(0, 255, 136, 0.05); transition: 0.3s; display: flex; flex-direction: column;">
+    
+    <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer; width: 100%; margin: 0;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <input type="checkbox" id="geekbit-service-check" onchange="prikaziPoljeZaTelefon()">
+            <div class="custom-checkbox-box" style="margin-right: 0;"></div>
+            <div style="display: flex; flex-direction: column;">
+                <span style="font-family: 'Nulshock'; color: #fff; letter-spacing: 1px; font-size: 0.95rem;">
+                    GEEKBIT ASSEMBLY™
+                </span>
+                <span style="font-size: 0.7rem; color: #888; margin-top: 2px;">
+                    Sklapanje • Cable Mgmt • OS
+                </span>
+            </div>
+        </div>
+        <span style="font-weight: bold; color: var(--accent); font-size: 1.1rem; white-space: nowrap;">+50 €</span>
+    </label>
+
+    <div id="service-phone-container" style="display: none; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; animation: fadeIn 0.3s;">
+        <label style="font-size: 0.8rem; color: var(--accent); display: block; margin-bottom: 5px;">
+            <i class="fas fa-phone"></i> BROJ TELEFONA (Za dogovor oko termina):
+        </label>
+        <input type="tel" id="service-phone-input" placeholder="npr. 064 123 4567" 
+               style="width: 100%; padding: 10px; background: #000; border: 1px solid var(--accent); color: #fff; border-radius: 4px; font-family: 'Roboto'; outline: none;">
+    </div>
+</div>
+                        <div style="width: 100%; height: 1px; background: #333; margin-bottom: 20px;"></div>
+                    
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <span style="color: var(--accent); font-size: 1.2rem; font-weight: bold;">UKUPNO:</span>
+                            <span id="final-total" style="font-size: 2rem; color: var(--accent); font-family: 'Nulshock'; text-shadow: 0 0 10px rgba(0,255,136,0.3);">
+                                0 €
+                            </span>
+                        </div>
+                    
+                        <button onclick="zavrsiKupovinu()" class="submit-btn" style="width: 100%;">
+                            PRIKAŽI KONTAKTE PRODAVACA <i class="fas fa-address-book"></i>
+                        </button>
+                    </div>
+
+                    <p style="font-size:0.8rem; color:#666; margin-top:15px; text-align:center;">
+                        *Plaćanje se vrši direktno prodavcima prilikom preuzimanja. GeekBit servis se plaća nakon sklapanja.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="checkout-modal" class="modal">
+        <div class="contact-modal-content" style="max-width: 600px;">
+            <span class="close-modal" onclick="zatvoriCheckout()">&times;</span>
+            <h2 style="font-family:'Nulshock'; color:var(--accent);">LISTA ZA KUPOVINU</h2>
+            <p style="color:#bbb; margin-bottom:20px;">Kontaktirajte prodavce da rezervišete delove.</p>
+            
+            <div id="sellers-list" style="text-align:left; max-height:400px; overflow-y:auto; padding-right:10px;">
+                </div>
+
+            <button class="modal-close-btn" onclick="zatvoriCheckout()">ZATVORI</button>
+        </div>
+    </div>
+    
+    <div id="custom-alert-box" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:11000; text-align:center; min-width:320px; padding:30px; background:#1e1e1e; border:2px solid var(--accent); border-radius:8px; box-shadow:0 0 50px rgba(0,0,0,0.9);">
+        <h3 id="alert-title" style="font-family:'Nulshock'; margin-bottom:15px; color:var(--accent); font-size:1.5rem;">PORUKA</h3>
+        <p id="alert-message" style="color:#fff; margin-bottom:25px; font-size:1.1rem; line-height:1.5;"></p>
+        <button onclick="zatvoriAlert()" class="submit-btn" style="background:var(--accent); color:#000; margin:0 auto; width:auto; padding:10px 30px; cursor:pointer; font-weight:bold; border:none; border-radius:4px;">OK</button>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

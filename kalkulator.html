@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>PC Skener | GeekBit</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/img/neon-logo1.png">
+    <style>
+        /* GLOBALNI RESET ZA SVAKI SLUČAJ */
+        body { 
+            background-color: #050505 !important; 
+            color: #fff !important; 
+            margin: 0; 
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* FLEXBOX ZA SAVRŠENO CENTRIRANJE MAIN DELA */
+        main {
+            flex: 1; /* Gura footer dole, a sebe širi */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 20px 60px 20px; /* Prostor za navigaciju */
+        }
+
+        /* EKSTREMNI GEEKBIT DIZAJN */
+        .geekbit-analyzer-wrapper {
+            width: 100%;
+            max-width: 900px; /* Prošireno za 2 kolone */
+            background: #0a0a0a; 
+            border: 1px solid #222;
+            border-top: 4px solid var(--accent, #00ff88); 
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analyzer-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .analyzer-header h1 {
+            font-family: 'Nulshock', sans-serif;
+            font-size: 2.2rem;
+            color: #fff;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .analyzer-header h1 span {
+            color: var(--accent, #00ff88);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+
+        .analyzer-header p {
+            color: #888;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* GRID ZA UNOS CELOG SISTEMA */
+        .inputs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .analyzer-input-box {
+            position: relative;
+        }
+
+        .analyzer-input-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent, #00ff88);
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .analyzer-input-box:focus-within i {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(0,255,136,0.8);
+        }
+
+        .analyzer-input {
+            width: 100%;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 16px 16px 16px 50px;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .analyzer-input:focus {
+            border-color: var(--accent, #00ff88);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
+            background: #151515;
+        }
+
+        .analyzer-input::placeholder { color: #555; }
+
+        .analyzer-btn {
+            width: 100%;
+            background: var(--accent, #00ff88);
+            color: #000;
+            border: none;
+            padding: 20px;
+            font-family: 'Nulshock', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(0,255,136,0.2);
+        }
+
+        .analyzer-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* EFEKAT SKENIRANJA */
+        .scan-loader {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+        .scan-loader i {
+            font-size: 3rem;
+            color: var(--accent, #00ff88);
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(0,255,136,0.8));
+        }
+        .scan-loader p {
+            font-family: 'Nulshock', sans-serif;
+            color: #fff;
+            letter-spacing: 2px;
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* REZULTAT KARTICE */
+        .check-item {
+            background: #111;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .check-item.success { border-left: 4px solid #00ff88; }
+        .check-item.warning { border-left: 4px solid orange; }
+        .check-item.danger { border-left: 4px solid #ff4d4d; }
+
+        .check-icon { font-size: 1.5rem; margin-top: 2px; }
+        .success .check-icon { color: #00ff88; }
+        .warning .check-icon { color: orange; }
+        .danger .check-icon { color: #ff4d4d; }
+
+        .check-content h4 { margin: 0 0 5px 0; font-size: 0.95rem; text-transform: uppercase; color: #fff; }
+        .check-content p { margin: 0; font-size: 0.9rem; color: #aaa; line-height: 1.4; }
+
+        @media (max-width: 768px) {
+            .inputs-grid { grid-template-columns: 1fr; gap: 15px; }
+            .geekbit-analyzer-wrapper { padding: 25px 15px; }
+            .analyzer-header h1 { font-size: 1.6rem; }
+            main { padding-top: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-container">
+            <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+            <span class="service-name">MARKETPLACE</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="komponente.html">BERZA</a></li>
+            <li><a href="quicksell.html">Instant Otkup</a></li>
+            <li><a href="kalkulator.html" style="color: var(--accent, #00ff88); border-bottom: 2px solid var(--accent, #00ff88);">KALKULATOR</a></li>
+            <li><a href="#" onclick="idiNaPostavljanjeOglasa(event)">Prodaj</a></li>
+
+            <li id="admin-btn" style="display: none;">
+                <a href="admin.html" style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 10px; border-radius: 4px;">ADMIN</a>
+            </li>
+
+            <li id="my-ads-btn" style="display: none;">
+                <a href="profil.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">
+                    <i class="fas fa-layer-group"></i> MOJI OGLASI
+                </a>
+            </li>
+
+            <li>
+                <a href="korpa.html" style="color:var(--accent); position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.1rem;"></i> 
+                    <span id="cart-count-badge" style="background: var(--error); color: white; border-radius: 50%; padding: 2px 5px; font-size: 0.7rem; position: absolute; top: -8px; right: -10px; display: none;">0</span>
+                </a>
+            </li>
+
+            <li class="login-item" style="margin-left: 10px;">
+                <a href="#" id="login-btn" onclick="prijaviSeGoogle(); return false;">
+                    <i class="fab fa-google"></i> PRIJAVI SE
+                </a>
+
+                <a href="profil.html" id="user-profile-btn" style="display: none; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 15px; border-radius: 20px; border: 1px solid #333;">
+                    <img id="user-avatar" src="assets/img/neon-logo1.png" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                    <span id="user-name" style="font-size: 0.9rem; color: #fff;"></span>
+                </a>
+
+                <a href="#" id="logout-btn" onclick="odjaviSe(); return false;" style="display: none; color: #666; margin-left: 5px; font-size: 1.1rem;" title="Odjavi se">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="geekbit-analyzer-wrapper">
+        <div class="analyzer-header">
+    <h1>PC <span>BOTTLENECK</span> KALKULATOR</h1>
+    <p>Unesi komponente i prepusti našem algoritmu da proveri svaku manu tvog sistema.</p>
+</div>
+
+            <div class="scan-loader" id="scan-loader">
+                <i class="fas fa-radar"></i>
+                <p id="scan-text">SKENIRANJE KOMPONENTI...</p>
+            </div>
+
+            <div id="analyzer-form-area">
+                <div class="inputs-grid">
+                    <div class="analyzer-input-box">
+                        <i class="fas fa-microchip"></i>
+                        <input type="text" id="calc-cpu" class="analyzer-input" placeholder="Procesor (Obavezno)*" autocomplete="off">
+                    </div>
+                    <div class="analyzer-input-box">
+                        <i class="fas fa-gamepad"></i>
+                        <input type="text" id="calc-gpu" class="analyzer-input" placeholder="Grafička Karta (Obavezno)*" autocomplete="off">
+                    </div>
+                    
+                    <div class="analyzer-input-box">
+                        <i class="fas fa-chess-board"></i>
+                        <input type="text" id="calc-mb" class="analyzer-input" placeholder="Matična ploča (Opciono, npr. Z790)" autocomplete="off">
+                    </div>
+                    <div class="analyzer-input-box">
+                        <i class="fas fa-memory"></i>
+                        <input type="text" id="calc-ram" class="analyzer-input" placeholder="RAM (Opciono, npr. DDR5 6000MHz)" autocomplete="off">
+                    </div>
+                    <div class="analyzer-input-box">
+                        <i class="fas fa-plug"></i>
+                        <input type="text" id="calc-psu" class="analyzer-input" placeholder="Napajanje (Opciono, npr. 750W)" autocomplete="off">
+                    </div>
+                    <div class="analyzer-input-box">
+                        <i class="fas fa-box"></i>
+                        <input type="text" id="calc-case" class="analyzer-input" placeholder="Kućište (Opciono, npr. ATX)" autocomplete="off">
+                    </div>
+                </div>
+
+                <button class="analyzer-btn" onclick="pokreniTotalnuAnalizu()">
+                    <i class="fas fa-bolt"></i> POKRENI DUBINSKU ANALIZU
+                </button>
+            </div>
+
+            <div id="calc-rezultat" style="margin-top: 30px; display: none;"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <a href="#" class="logo-container footer-brand-fix">
+                    <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+                    <span class="service-name">MARKETPLACE</span>
+                </a>
+                <p style="margin-top: 20px;">
+                    Prvi pravi marketplace za hardver entuzijaste. 
+                    Kupuj sigurno, prodaj brzo, upgrade-uj pametno.
+                </p>
+            </div>
+            
+            <div class="footer-section links">
+                <h3>Navigacija</h3>
+                <ul>
+                    <li><a href="index.html">Početna</a></li>
+                    <li><a href="komponente.html">Berza</a></li>
+                    <li><a href="quicksell.html">Instant Otkup</a></li>
+                    <li><a href="#contact">Postavi Oglas</a></li>
+                </ul>
+            </div>
+    
+            <div class="footer-section social">
+                <h3>Zapratite nas</h3>
+                <p>Budite u toku sa najnovijim dropovima i popustima.</p>
+                <div class="social-icons">
+                       <a href="https://www.instagram.com/geekbit.tech/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.tiktok.com/@geekbit.tech" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://discord.gg/Ra7fcJZw3m" target="_blank"><i class="fab fa-discord"></i></a>
+    <a href="https://www.youtube.com/@GeekBit1811" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    
+      <div class="footer-bottom" style="padding-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
+            <a href="uslovi.pdf" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">Uslovi Korišćenja</a>
+            <span style="color: #444;">|</span>
+            <a href="privatnost.pdf" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">Politika Privatnosti</a>
+        </div>
+        &copy; 2026 GeekBit Marketplace
+    </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/main.js"></script> 
+    
+    <script>
+        // LOGIKA KALKULATORA (SA ANIMACIJOM I PUNOM ANALIZOM)
+        window.pokreniTotalnuAnalizu = function() {
+            const cpuIn = document.getElementById('calc-cpu').value.toUpperCase().trim();
+            const gpuIn = document.getElementById('calc-gpu').value.toUpperCase().trim();
+            const mbIn = document.getElementById('calc-mb').value.toUpperCase().trim();
+            const ramIn = document.getElementById('calc-ram').value.toUpperCase().trim();
+            const psuIn = document.getElementById('calc-psu').value.toUpperCase().trim();
+            const caseIn = document.getElementById('calc-case').value.toUpperCase().trim();
+            
+            const rezultatDiv = document.getElementById('calc-rezultat');
+            const loader = document.getElementById('scan-loader');
+            const formArea = document.getElementById('analyzer-form-area');
+
+            // Reset
+            rezultatDiv.style.display = 'none';
+
+            if (!cpuIn || !gpuIn) {
+                rezultatDiv.style.display = 'block';
+                rezultatDiv.innerHTML = `
+                    <div style="background: rgba(255, 77, 77, 0.1); border: 1px solid #ff4d4d; padding: 15px; border-radius: 8px; color: #ff4d4d; text-align: center;">
+                        <i class="fas fa-exclamation-circle"></i> Morate uneti makar Procesor i Grafičku kartu za osnovnu proveru!
+                    </div>`;
+                return;
+            }
+
+            if(typeof analizirajCPU !== 'function' || typeof analizirajGPU !== 'function') {
+                alert("Greška: Baza znanja nije povezana."); return;
+            }
+
+            // --- POKREĆEMO ANIMACIJU ---
+            formArea.style.display = 'none';
+            loader.style.display = 'block';
+            
+            const scanText = document.getElementById('scan-text');
+            setTimeout(() => scanText.innerText = "PROVERA USKOG GRLA (BOTTLENECK)...", 500);
+            setTimeout(() => scanText.innerText = "ANALIZA FIZIČKIH DIMENZIJA...", 1200);
+            setTimeout(() => scanText.innerText = "KALKULACIJA NAPAJANJA...", 1800);
+
+            // Simuliramo učitavanje od 2.5 sekunde
+            setTimeout(() => {
+                loader.style.display = 'none';
+                formArea.style.display = 'block'; // Vraćamo formu da može opet da kuca
+                
+                // Izvlačimo sve podatke
+                const cStats = analizirajCPU(cpuIn);
+                const gStats = analizirajGPU(gpuIn);
+                
+                const cSocket = detektujSocket(cpuIn);
+                const mbSocket = mbIn ? detektujSocket(mbIn) : null;
+                
+                const rTip = ramIn ? detektujRam(ramIn) : null;
+                const mbRamTip = mbIn ? detektujRam(mbIn) : null;
+                
+                const psuSnaga = psuIn ? detektujSnaguNapajanja(psuIn) : 0;
+                
+                const gDuzina = detektujDuzinuGPU(gpuIn);
+                const caseMaxGpu = caseIn ? detektujMaxGPUKucista(caseIn) : 0;
+                
+                const mbVelicina = mbIn ? detektujFormat(mbIn) : -1;
+                const caseVelicina = caseIn ? detektujFormat(caseIn) : -1;
+
+                let html = "";
+                let ukupnaPotrosnja = cStats.tdp + gStats.tdp + 80; 
+                let preporucenoNapajanje = Math.max(ukupnaPotrosnja + 150, gStats.minPsu);
+
+                // ==============================
+                // 1. BOTTLENECK I GLAVNA OCENA
+                // ==============================
+                let naslovBuilda = "BUDGET / OFFICE BUILD";
+                let bojaBedza = "#888";
+                
+                if(gStats.score >= 9.5 && cStats.score >= 8.5) { naslovBuilda = "4K ULTIMATE MONSTER"; bojaBedza = "#00ff88"; }
+                else if(gStats.score >= 7.5 && cStats.score >= 6.5) { naslovBuilda = "1440p HIGH-END GAMING"; bojaBedza = "gold"; }
+                else if(gStats.score >= 4.5 && cStats.score >= 4.5) { naslovBuilda = "1080p SWEET SPOT"; bojaBedza = "#00ff88"; }
+                else if(gStats.score <= 3.5 && cStats.score <= 3.5) { naslovBuilda = "ESPORTS / RETRO GAMING"; bojaBedza = "#4d94ff"; }
+
+                let razlika = gStats.score - cStats.score;
+                let bState = 'success'; let bIcon = 'fa-check-circle';
+                let bottleneckPoruka = `Procesor i Grafička su odlično upareni!`;
+
+                if(gStats.score >= 9.5 && cStats.score <= 6) {
+                    naslovBuilda = "IMBALANCED HIGH-END"; bojaBedza = "#ff4d4d"; bState = 'danger'; bIcon = 'fa-skull-crossbones';
+                    bottleneckPoruka = `Grafička karta je vrhunska, ali će je procesor drastično usporiti. Očekujte "seckanje" u igrama.`;
+                } else if(razlika >= 3) {
+                    bState = 'warning'; bIcon = 'fa-exclamation-triangle';
+                    bottleneckPoruka = `Grafika neće raditi na 100% snage jer procesor ne može da je isprati.`;
+                } else if (cStats.score - gStats.score >= 3.0) { 
+                    bState = 'warning'; bIcon = 'fa-exclamation-triangle';
+                    bottleneckPoruka = `Imate odličan procesor, ali je grafička karta previše slaba za njega u modernom gejmingu.`;
+                }
+
+                html += `
+                    <div style="background:#111; border:1px solid #333; border-top:4px solid ${bojaBedza}; padding:20px; border-radius:6px; margin-bottom:20px; text-align:center;">
+                        <div style="font-size:0.8rem; color:#888; text-transform:uppercase;">NIVO KONFIGURACIJE:</div>
+                        <h3 style="color:${bojaBedza}; margin:8px 0 15px 0; font-family:'Nulshock', sans-serif; font-size: 1.4rem;">${naslovBuilda}</h3>
+                        
+                        <div style="display:flex; justify-content:center; gap:20px; margin-top:15px; border-top:1px solid #222; padding-top:15px;">
+                            <div><span style="font-size:0.8rem; color:#888; display:block;">Sistem troši</span><strong style="color:#fff;">~${ukupnaPotrosnja}W</strong></div>
+                            <div><span style="font-size:0.8rem; color:#888; display:block;">Minimum PSU</span><strong style="color:var(--accent);"> ${preporucenoNapajanje}W+</strong></div>
+                        </div>
+                    </div>
+                `;
+
+                // ==============================
+                // 2. DETALJNI CHECKLIST
+                // ==============================
+                let checklist = "";
+
+                // Bottleneck kartica
+                checklist += `
+                    <div class="check-item ${bState}">
+                        <div class="check-icon"><i class="fas ${bIcon}"></i></div>
+                        <div class="check-content">
+                            <h4>CPU & GPU Balans</h4>
+                            <p>${bottleneckPoruka}</p>
+                        </div>
+                    </div>`;
+
+                // Socket provera (ako je uneta ploča)
+                if(mbIn) {
+                    if(!cSocket || !mbSocket) {
+                        checklist += `<div class="check-item warning"><div class="check-icon"><i class="fas fa-question-circle"></i></div><div class="check-content"><h4>Socket Nepoznat</h4><p>Proverite ručno da li procesor staje na ovu ploču.</p></div></div>`;
+                    } else if (cSocket !== mbSocket) {
+                        checklist += `<div class="check-item danger"><div class="check-icon"><i class="fas fa-times-circle"></i></div><div class="check-content"><h4>Fizički Nekompatibilno</h4><p>CPU zahteva <b>${cSocket}</b>, a ploča je <b>${mbSocket}</b>!</p></div></div>`;
+                    } else {
+                        checklist += `<div class="check-item success"><div class="check-icon"><i class="fas fa-check-circle"></i></div><div class="check-content"><h4>Socket Odgovara</h4><p>Procesor (${cSocket}) staje na matičnu ploču.</p></div></div>`;
+                    }
+                }
+
+                // RAM provera
+                if(ramIn && mbIn) {
+                    if(rTip && mbRamTip && rTip !== mbRamTip) {
+                        checklist += `<div class="check-item danger"><div class="check-icon"><i class="fas fa-times-circle"></i></div><div class="check-content"><h4>Pogrešan RAM</h4><p>Ploča traži <b>${mbRamTip}</b>, a vi ste uneli <b>${rTip}</b>.</p></div></div>`;
+                    } else if (rTip && mbRamTip) {
+                        checklist += `<div class="check-item success"><div class="check-icon"><i class="fas fa-check-circle"></i></div><div class="check-content"><h4>RAM Kompatibilan</h4><p>Tip memorije (${rTip}) je odgovarajući.</p></div></div>`;
+                    }
+                }
+
+                // Napajanje provera
+                if(psuIn) {
+                    if (psuSnaga > 0 && psuSnaga < preporucenoNapajanje) {
+                        checklist += `<div class="check-item danger"><div class="check-icon"><i class="fas fa-bolt"></i></div><div class="check-content"><h4>Slabo Napajanje</h4><p>Uneto je ${psuSnaga}W, ali ovaj sistem zahteva minimum <b>${preporucenoNapajanje}W</b>.</p></div></div>`;
+                    } else if (psuSnaga > 0) {
+                        checklist += `<div class="check-item success"><div class="check-icon"><i class="fas fa-check-circle"></i></div><div class="check-content"><h4>Napajanje Dovoljno</h4><p>${psuSnaga}W pokriva potrebe sistema.</p></div></div>`;
+                    }
+                }
+
+                // Kućište (Grafika i Ploča)
+                if(caseIn) {
+                    // Grafika dužina
+                    if (gDuzina > 0 && caseMaxGpu > 0) {
+                        if (gDuzina > caseMaxGpu) {
+                            checklist += `<div class="check-item danger"><div class="check-icon"><i class="fas fa-times-circle"></i></div><div class="check-content"><h4>Grafička ne staje</h4><p>GPU (~${gDuzina}mm) je prevelik za kućište (max ${caseMaxGpu}mm).</p></div></div>`;
+                        } else {
+                            checklist += `<div class="check-item success"><div class="check-icon"><i class="fas fa-check-circle"></i></div><div class="check-content"><h4>Grafička staje</h4><p>Ima dovoljno mesta za grafiku (~${gDuzina}mm).</p></div></div>`;
+                        }
+                    }
+                    
+                    // Ploča veličina
+                    if(mbIn && mbVelicina !== -1 && caseVelicina !== -1) {
+                        if(mbVelicina > caseVelicina) {
+                            checklist += `<div class="check-item danger"><div class="check-icon"><i class="fas fa-times-circle"></i></div><div class="check-content"><h4>Ploča je prevelika</h4><p>Matična ploča fizički ne može da stane u ovo kućište.</p></div></div>`;
+                        } else {
+                            checklist += `<div class="check-item success"><div class="check-icon"><i class="fas fa-check-circle"></i></div><div class="check-content"><h4>Format Kućišta Odgovara</h4><p>Ploča se uklapa u gabarite kućišta.</p></div></div>`;
+                        }
+                    }
+                }
+
+                html += checklist;
+
+                // Dugme za berzu
+                html += `
+                    <div style="margin-top: 30px; text-align: center;">
+                        <p style="color: #aaa; font-size: 0.95rem; margin-bottom: 15px;">Fale ti delovi za ovaj sistem?</p>
+                        <a href="komponente.html" class="analyzer-btn" style="display:inline-block; text-decoration:none; padding:15px 30px; background:transparent; border:2px solid var(--accent); color:var(--accent);">
+                            <i class="fas fa-search"></i> PRONAĐI NA BERZI
+                        </a>
+                    </div>
+                `;
+
+                rezultatDiv.innerHTML = html;
+                rezultatDiv.style.display = 'block';
+
+            }, 2500); // 2.5 sekundi animacije
+        };
+
+        // Omogućava Enter za sva polja
+        document.querySelectorAll('.analyzer-input').forEach(input => {
+            input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') pokreniTotalnuAnalizu();
+            });
+        });
+    </script>
+</body>
+</html>

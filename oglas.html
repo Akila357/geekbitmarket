@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalji Oglasa | GeekBit</title>
+    <meta property="og:title" content="GeekBit Oglas">
+    <meta property="og:description" content="Pogledajte ovaj oglas na GeekBit berzi hardvera.">
+    <meta property="og:image" content="assets/img/neon-logo1.png">
+    <meta property="og:url" content="https://marketplace.geekbit.tech/oglas.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+   <link rel="stylesheet" href="css/style.css?v=3.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/neon-logo2.png">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <meta name="theme-color" content="#00ff88">
+ <style>
+    /* =========================================
+       ✨ GEBIT MARKETPLACE - PREMIUM DUGMADI
+       ========================================= */
+
+    /* DEFINIŠEMO BOJU BERZE (U slučaju da je nema) */
+    :root {
+        --gebit-yellow: #ffff00; /* Originalna GeekBit Žuta */
+        --gebit-dark: rgba(0, 0, 0, 0.4); /* Tamna, translucent podloga */
+    }
+
+    /* 1. Kontejner (Red) - Osiguravamo stabilan red */
+    .card-actions-row {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important; /* Optimalan razmak */
+        width: 100% !important;
+        align-items: center !important;
+        justify-content: center !important; /* Centriramo na ekranu */
+        margin-bottom: 20px !important;
+        padding: 0 10px !important; /* Margina od ivica ekrana */
+        box-sizing: border-box !important;
+    }
+
+    /* 2. Dugme KORPA - SADA SE SLAŽE SA DIZAJNOM */
+    #btn-add-cart {
+        flex: 0 0 50px !important; /* Fiksna širina (kockica) */
+        width: 50px !important;
+        height: 50px !important; /* Standardna visina */
+        
+        /* === Aesthetics: Tamna podloga + Žute Ivice + Žuta Ikona === */
+        background-color: var(--gebit-dark) !important;
+        border: 2px solid var(--gebit-yellow) !important; /* Jake žute ivice */
+        color: var(--gebit-yellow) !important; /* Žuta ikona */
+        
+        /* === Finalni detalji === */
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.3rem !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        margin: 0 !important;
+    }
+    #btn-add-cart:hover {
+        background-color: var(--gebit-yellow) !important; /* Žuta podloga na hover */
+        color: #000 !important; /* Crna ikona na hover */
+        box-shadow: 0 0 15px rgba(255, 255, 0, 0.5) !important; /* Žuti sjaj */
+    }
+
+    /* 3. Zatraži kupovinu - VRAĆAMO ORIGINALNU LEPOTU (Žute Ivice) */
+    #btn-handshake {
+        flex: 1 !important; /* Ključno: Popunjava preostali prostor DO ivice ekrana */
+        width: auto !important; /* Ključno: Poništava pokvarenih 85% iz starog CSS-a */
+        height: 50px !important; /* Standardna visina */
+        margin: 0 !important; /* Reset margina */
+        
+        /* === Aesthetics: Tamna podloga + Žute Ivice + Žuti Tekst (Premium look) === */
+        background-color: var(--gebit-dark) !important; /* Tamna podloga */
+        border: 2px solid var(--gebit-yellow) !important; /* Jake žute ivice (User Request) */
+        color: var(--gebit-yellow) !important; /* Žuti tekst i ikona (User Request) */
+        
+        /* === Originalna .cta-button lepota === */
+        border-radius: 8px !important;
+        font-weight: 900 !important; /* Ultra bold */
+        text-transform: uppercase !important; /* Velika slova */
+        font-size: 0.9rem !important;
+        letter-spacing: 0.5px !important;
+        
+        /* === Poravnanje === */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important; /* Razmak između ikonice i teksta */
+        
+        /* === Interakcija === */
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        font-family: inherit !important;
+    }
+
+    #btn-handshake:hover {
+        background-color: var(--gebit-yellow) !important; /* Žuta podloga na hover */
+        color: #000 !important; /* Crni tekst na hover */
+        box-shadow: 0 0 15px rgba(255, 255, 0, 0.5) !important; /* Žuti sjaj */
+        transform: translateY(-2px) !important; /* Mali skok na hover */
+    }
+</style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo-container">
+            <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+            <span class="service-name">MARKETPLACE</span>
+        </a>
+   <ul class="nav-links">
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="komponente.html">BERZA</a></li>
+            <li><a href="quicksell.html">Instant Otkup</a></li>
+            <li><a href="kalkulator.html">KALKULATOR</a></li>
+            <li><a href="#" onclick="idiNaPostavljanjeOglasa(event)">Prodaj</a></li>
+
+            <li id="admin-btn" style="display: none;">
+                <a href="admin.html" style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 10px; border-radius: 4px;">ADMIN</a>
+            </li>
+
+            <li id="my-ads-btn" style="display: none;">
+                <a href="profil.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">
+                    <i class="fas fa-layer-group"></i> MOJI OGLASI
+                </a>
+            </li>
+
+            <li>
+                <a href="korpa.html" style="color:var(--accent); position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.1rem;"></i> 
+                    <span id="cart-count-badge" style="
+                        background: var(--error); 
+                        color: white; 
+                        border-radius: 50%; 
+                        padding: 2px 5px; 
+                        font-size: 0.7rem; 
+                        position: absolute; 
+                        top: -8px; 
+                        right: -10px; 
+                        display: none;">0</span>
+                </a>
+            </li>
+
+            <li class="login-item" style="margin-left: 10px;">
+                
+                <a href="#" id="login-btn" onclick="prijaviSeGoogle(); return false;">
+                    <i class="fab fa-google"></i> PRIJAVI SE
+                </a>
+
+                <a href="profil.html" id="user-profile-btn" style="display: none; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 15px; border-radius: 20px; border: 1px solid #333;">
+                    <img id="user-avatar" src="assets/img/neon-logo1.png" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                    <span id="user-name" style="font-size: 0.9rem; color: #fff;"></span>
+                </a>
+
+                <a href="#" id="logout-btn" onclick="odjaviSe(); return false;" style="display: none; color: #666; margin-left: 5px; font-size: 1.1rem;" title="Odjavi se">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <main style="padding-top: 120px; min-height: 80vh; max-width: 1200px; margin: 0 auto; padding-bottom: 50px;">
+        
+        <div id="loading-spinner" style="text-align: center; color: var(--accent); font-family: 'Nulshock'; padding: 50px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 20px;"></i>
+            <p>Učitavanje oglasa...</p>
+        </div>
+
+        <div id="single-ad-content" style="display: none; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;">
+            
+            <div class="ad-gallery-section">
+                <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 10px; position: relative;">
+                    <div id="ad-badge" style="position: absolute; top: 20px; left: 20px; background: var(--accent); color: #000; font-weight: bold; padding: 5px 15px; border-radius: 20px; z-index: 10;">KATEGORIJA</div>
+                    
+                    <img id="main-ad-image" src="assets/img/neon-logo1.png" style="width: 100%; height: 400px; object-fit: contain; cursor: pointer; border-radius: 8px;">
+                </div>
+                <div id="ad-thumbnails" style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 10px;">
+                    </div>
+            </div>
+
+            <div class="ad-info-section" style="background: #0a0a0a; padding: 30px; border-radius: 12px; border: 1px solid #222; box-shadow: 0 0 30px rgba(0,0,0,0.5);">
+                
+                <h1 id="ad-title" style="font-family: 'Nulshock'; color: #fff; font-size: 2rem; margin-bottom: 15px;">Naslov Oglasa</h1>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px;">
+                    <div id="ad-price" style="font-size: 2.5rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 10px rgba(0,255,136,0.3);">0 €</div>
+                    <div id="ad-condition" style="color: #888; font-size: 1rem; border: 1px solid #444; padding: 5px 10px; border-radius: 4px;">Stanje</div>
+                </div>
+
+                <div style="background: #111; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent); margin-bottom: 25px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#111'" id="seller-box">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i id="ad-seller-icon" class="fas fa-user-astronaut" style="font-size: 2rem; color: var(--accent);"></i>
+                        <div>
+                            <p style="color: #666; font-size: 0.8rem; margin: 0; text-transform: uppercase;">Prodavac</p>
+                            <h3 id="ad-seller-name" style="color: #fff; margin: 0; font-size: 1.2rem;">Učitavanje...</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                    <div style="display: flex; gap: 15px;">
+       <button id="btn-add-cart">
+        <i class="fas fa-shopping-cart"></i>
+    </button>
+    
+    <button id="btn-handshake">
+        <i class="fas fa-handshake"></i> ZATRAŽI KUPOVINU
+    </button>
+                    </div>
+                    <button id="btn-contact" style="width: 100%; background: #222; color: #fff; border: 1px solid #444; padding: 15px; border-radius: 6px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#222'">
+                        <i class="fas fa-envelope"></i> KONTAKTIRAJ PRODAVCA
+                    </button>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3 style="color: #888; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px;"><i class="fas fa-align-left"></i> Opis i Specifikacije</h3>
+                    <div id="ad-description" style="color: #ccc; line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap;">
+                        Učitavanje opisa...
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="image-modal" class="modal" style="display: none;">
+        <span class="close-modal" onclick="zatvoriGaleriju()">&times;</span>
+        <div class="modal-gallery-wrapper">
+            <img id="modal-img" src="" onclick="event.stopPropagation()">
+            <div class="modal-controls">
+                <button class="gallery-arrow" onclick="promeniSliku(-1); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
+                <div id="modal-caption">Opis slike</div>
+                <button class="gallery-arrow" onclick="promeniSliku(1); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-modal" class="modal">
+        <div class="contact-modal-content">
+            <span class="close-contact" onclick="zatvoriKontakt()">&times;</span>
+            <h2 style="font-family: 'Nulshock'; margin-bottom: 20px;">KONTAKT</h2>
+            <div class="contact-info-row"><i class="fas fa-user"></i><div><small>Prodavac</small><p id="modal-seller-name" style="font-weight: bold; color: #fff;"></p></div></div>
+            <div class="contact-info-row"><i class="fas fa-envelope"></i><div><small>Email</small><a id="modal-seller-email" href="#"></a></div></div>
+            <div class="contact-info-row"><i class="fas fa-phone"></i><div><small>Telefon</small><a id="modal-seller-phone" href="#"></a></div></div>
+            <button class="modal-close-btn" onclick="zatvoriKontakt()" style="margin-top: 20px;">ZATVORI</button>
+        </div>
+    </div>
+
+    <div id="custom-alert-box" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:11000; text-align:center; min-width:320px; padding:30px; background:#1e1e1e; border:2px solid var(--accent); border-radius:8px; box-shadow:0 0 50px rgba(0,0,0,0.9);">
+        <h3 id="alert-title" style="font-family:'Nulshock'; margin-bottom:15px; color:var(--accent); font-size:1.5rem;">PORUKA</h3>
+        <p id="alert-message" style="color:#fff; margin-bottom:25px; font-size:1.1rem; line-height:1.5;"></p>
+        <button onclick="zatvoriAlert()" class="submit-btn" style="background:var(--accent); color:#000; margin:0 auto; width:auto; padding:10px 30px; cursor:pointer; font-weight:bold; border:none; border-radius:4px;">OK</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/main.js?v=31.0" defer></script>
+    <div id="image-modal" class="modal" style="display: none; position: fixed; z-index: 100000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px);">
+        
+        <span onclick="zatvoriGaleriju()" style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 100001; transition: 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#fff'">&times;</span>
+        
+        <div style="position: relative; width: 90%; max-width: 1000px; height: 80vh; display: flex; justify-content: center; align-items: center;">
+            
+            <button class="gallery-arrow" onclick="promeniSliku(-1); event.stopPropagation();" style="position: absolute; left: -10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: 2px solid var(--accent); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; z-index: 100001; transition: 0.3s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='var(--accent)'; this.style.color='black';" onmouseout="this.style.background='rgba(0,0,0,0.6)'; this.style.color='white';">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <img id="modal-img" src="" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.8); cursor: default; transition: opacity 0.2s;" onclick="event.stopPropagation();">
+            
+            <button class="gallery-arrow" onclick="promeniSliku(1); event.stopPropagation();" style="position: absolute; right: -10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: 2px solid var(--accent); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 1.5rem; z-index: 100001; transition: 0.3s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='var(--accent)'; this.style.color='black';" onmouseout="this.style.background='rgba(0,0,0,0.6)'; this.style.color='white';">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+        </div>
+        
+        <div id="modal-caption" style="margin-top: 20px; color: #ccc; font-size: 1.2rem; font-family: 'Nulshock', sans-serif; letter-spacing: 1px; text-align: center; padding: 0 20px;"></div>
+    </div>
+</body>
+</html>

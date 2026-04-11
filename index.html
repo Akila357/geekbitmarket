@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" href="css/style.css?v=30.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/img/neon-logo2.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    
+    <title>GeekBit Marketplace - Berza Hardvera i Komponenti</title>
+    <meta name="description" content="Kupujte i prodajte polovne i nove računarske komponente, grafičke kartice, procesore i gejming opremu. Sigurna i brza prodaja hardvera u Srbiji.">
+    <meta name="keywords" content="geekbit, marketplace, hardware, berza, komponente, prodaja, srbija, grafičke kartice, procesori, polovno, novo, otkup">
+    <meta name="author" content="GeekBit">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://marketplace.geekbit.tech/">
+    <meta property="og:title" content="GeekBit Marketplace - Berza Hardvera">
+    <meta property="og:description" content="Najbolje mesto za kupovinu, prodaju i otkup hardvera u Srbiji. Pridruži se GeekBit zajednici!">
+    <meta property="og:image" content="https://marketplace.geekbit.tech/assets/img/neon-logo2.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://marketplace.geekbit.tech/">
+    <meta property="twitter:title" content="GeekBit Marketplace">
+    <meta property="twitter:description" content="Kupujte i prodajte hardver sigurno i brzo.">
+    <meta property="twitter:image" content="https://marketplace.geekbit.tech/assets/img/neon-logo2.png">
+    
+    <meta name="google-site-verification" content="pGQgjDsZZw9lB4KypACoTBejrGZCmKoIPmj4kRNPFA4" />
+    <style>
+
+
+    /* 1. HERO PREKO CELOG EKRANA */
+    #hero {
+        min-height: 100vh !important; /* Garantuje da zauzima celu visinu ekrana */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Savršeno centrira sadržaj po vertikali */
+        padding-top: 80px; /* Ako je meni fiksiran na vrhu, da ne preklapa naslov */
+        box-sizing: border-box;
+    }
+
+    /* 2. POČETNO STANJE ELEMENTA (Dok traje preloader) */
+    .hero-content .status-badge-hero,
+    .hero-content .hero-title,
+    .hero-content .hero-subtitle,
+    .hero-content .hero-buttons,
+    .hero-content .hero-stats-container {
+        opacity: 0;
+        transform: translateY(40px); /* Spušteni su za 40px na dole */
+        /* Dodajemo prefinjenu bezier krivu za najmekše moguće sletanje */
+        transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* 3. KADA SE SAJT UČITA (Kaskadno "Waterfall" isplivavanje) */
+    /* Tvoj main.js već dodaje klasu 'loaded' na body kada se preloader završi. Mi to koristimo kao okidač! */
+    
+    body.loaded .hero-content .status-badge-hero { 
+        opacity: 1; 
+        transform: translateY(0); 
+        transition-delay: 0.1s; 
+    }
+    
+    body.loaded .hero-content .hero-title { 
+        opacity: 1; 
+        transform: translateY(0); 
+        transition-delay: 0.3s; 
+    }
+    
+    body.loaded .hero-content .hero-subtitle { 
+        opacity: 1; 
+        transform: translateY(0); 
+        transition-delay: 0.5s; 
+    }
+    
+    body.loaded .hero-content .hero-buttons { 
+        opacity: 1; 
+        transform: translateY(0); 
+        transition-delay: 0.7s; 
+    }
+    
+    body.loaded .hero-content .hero-stats-container { 
+        opacity: 1; 
+        transform: translateY(0); 
+        transition-delay: 0.9s; 
+    }
+</style>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader-content">
+            <img src="assets/img/neon-logo1.png" alt="Loading..." class="loader-logo">
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+            <p class="loader-text">INITIALIZING SYSTEM...</p>
+        </div>
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo-container">
+            <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+            <span class="service-name">MARKETPLACE</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="index.html">Početna</a></li>
+            <li><a href="komponente.html">BERZA</a></li>
+            <li><a href="quicksell.html">Instant Otkup</a></li>
+            <li><a href="kalkulator.html">KALKULATOR</a></li>
+            <li><a href="#" onclick="idiNaPostavljanjeOglasa(event)">Prodaj</a></li>
+
+            <li id="admin-btn" style="display: none;">
+                <a href="admin.html" style="color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 10px; border-radius: 4px;">ADMIN</a>
+            </li>
+
+            <li id="my-ads-btn" style="display: none;">
+                <a href="profil.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">
+                    <i class="fas fa-layer-group"></i> MOJI OGLASI
+                </a>
+            </li>
+
+            <li>
+                <a href="korpa.html" style="color:var(--accent); position: relative; display: flex; align-items: center;">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.1rem;"></i> 
+                    <span id="cart-count-badge" style="
+                        background: var(--error); 
+                        color: white; 
+                        border-radius: 50%; 
+                        padding: 2px 5px; 
+                        font-size: 0.7rem; 
+                        position: absolute; 
+                        top: -8px; 
+                        right: -10px; 
+                        display: none;">0</span>
+                </a>
+            </li>
+
+            <li class="login-item" style="margin-left: 10px;">
+                <a href="#" id="login-btn" onclick="prijaviSeGoogle(); return false;">
+                    <i class="fab fa-google"></i> PRIJAVI SE
+                </a>
+
+                <a href="profil.html" id="user-profile-btn" style="display: none; align-items: center; gap: 10px; background: #1a1a1a; padding: 5px 15px; border-radius: 20px; border: 1px solid #333;">
+                    <img id="user-avatar" src="assets/img/neon-logo1.png" style="width: 25px; height: 25px; border-radius: 50%; object-fit: cover;">
+                    <span id="user-name" style="font-size: 0.9rem; color: #fff;"></span>
+                </a>
+
+                <a href="#" id="logout-btn" onclick="odjaviSe(); return false;" style="display: none; color: #666; margin-left: 5px; font-size: 1.1rem;" title="Odjavi se">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <section id="hero">
+       <div class="hero-background">
+            <div class="glowing-orb orb-1"></div>
+            <div class="glowing-orb orb-2"></div>
+            <div class="grid-overlay"></div>
+            <div class="hardware-orbs" id="hardware-orbs"></div> 
+        </div>
+        <div class="hero-content">
+            <div class="status-badge-hero">
+                <span class="pulse-dot"></span> AKTIVNO 24/7
+            </div>
+
+            <h1 class="hero-title">
+                UPGRADE <br> <span class="neon-text">YOUR GEAR</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Najveća tech berza na Balkanu. Sigurna kupovina, brza prodaja i provereni prodavci na jednom mestu.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="komponente.html" class="cta-button">ISTRAŽI PONUDU <i class="fas fa-arrow-right"></i></a>
+                <a href="#contact" class="cta-button-outline" onclick="idiNaPostavljanjeOglasa(event)">POSTAVI OGLAS <i class="fas fa-plus"></i></a>
+            </div>
+
+            <div class="hero-stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-microchip"></i></div>
+                    <div class="stat-info">
+                        <span id="stat-oglasi" class="stat-number">0</span>
+                        <span class="stat-label">AKTIVNIH OGLASA</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <span id="stat-korisnici" class="stat-number">0</span>
+                        <span class="stat-label">KORISNIKA</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="stat-info">
+                        <span id="stat-vrednost" class="stat-number">0 €</span>
+                        <span class="stat-label">VREDNOST BERZE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main style="padding-top: 0;">
+        
+        <section class="latest-drops">
+            <h2>NAJNOVIJI OGLASI</h2>
+            <div id="latest-container" class="grid-container">
+                <p style="text-align:center; width:100%; color:#888;">Učitavanje oglasa...</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="komponente.html" class="cta-button-outline">POGLEDAJ SVE KOMPONENTE</a>
+            </div>
+        </section>
+
+        <section id="contact" class="form-section">
+            <div class="glass-form">
+                <h2 style="font-family: 'Nulshock'; text-align: center; margin-bottom: 5px;">POSTAVI OGLAS</h2>
+                <p style="text-align: center; color: #888; margin-bottom: 30px;">Popunite formu u par koraka.</p>
+
+                <form id="oglas-form">
+                    
+                    <div class="step-progress-bar">
+                        <div class="step-progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p id="step-counter" style="text-align: center; color: var(--accent); margin-bottom: 20px; font-family: 'Nulshock'; font-size: 0.8rem;">KORAK 1/3</p>
+
+                    <div class="form-step active-step">
+                        <h3 style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Nulshock'; font-size: 1rem;">ŠTA PRODAJEŠ?</h3>
+                        
+                        <div class="form-group">
+                            <label>Vaše Ime (Nadimak):</label>
+                            <input type="text" id="ime-prodavca" placeholder="npr. Petar" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Naslov Oglasa:</label>
+                            <input type="text" id="naziv" placeholder="npr. RTX 3060 Ti" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kategorija:</label>
+                            <select id="kategorija" required onchange="ucitajPodatkeZaKategoriju(this.value)">
+                                <option value="" disabled selected>Izaberi...</option>
+                                <option value="gpu">Grafičke Kartice</option>
+                                <option value="cpu">Procesori</option>
+                                <option value="maticna">Matične ploče</option>
+                                <option value="ram">RAM Memorija</option>
+                                <option value="skladiste">Skladište (SSD/HDD)</option>
+                                <option value="monitor">Monitori</option>
+                                <option value="periferije">Periferije</option>
+                                <option value="kuciste">Kućišta</option>
+                                <option value="napajanje">Napajanja</option>
+                                <option value="konfiguracije">Gotove Konfiguracije</option>
+                                <option value="konzole">Igračke Konzole</option>
+                                <option value="ostalo">Ostalo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Proizvođač:</label>
+                            <select id="brend" required>
+                                <option value="" disabled selected>Prvo izaberi kategoriju...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Specifikacije:</label>
+                            <div id="form-tags-container" class="tech-tags">
+                                <small style="color:#666;">Prvo izaberi kategoriju...</small>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="next-step-btn" onclick="window.nextPrev(1)">DALJE <i class="fas fa-arrow-right"></i></button>
+                    </div>
+
+                    <div class="form-step">
+                        <h3 style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Nulshock'; font-size: 1rem;">DETALJI OGLASA</h3>
+
+                        <div class="form-row" style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label>Cena (€):</label>
+                                <input type="number" id="cena" placeholder="0" min="0" max="999999" 
+           oninput="if(this.value > 999999) this.value = 999999; if(this.value < 0) this.value = 0;" 
+           required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Stanje:</label>
+                                <select id="stanje">
+                                    <option value="Polovno">Polovno</option>
+                                    <option value="Novo">Novo</option>
+                                    <option value="Oštećeno">Oštećeno</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Opis:</label>
+                            <textarea id="opis" rows="5" placeholder="Stanje, garancija, radna garancija..." required></textarea>
+                        </div>
+
+                        <div class="nav-buttons" style="display: flex; gap: 10px;">
+                            <button type="button" class="prev-step-btn" onclick="window.nextPrev(-1)" style="flex: 1;">NAZAD</button>
+                            <button type="button" class="next-step-btn" onclick="window.nextPrev(1)" style="flex: 2;">DALJE <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step">
+                        <h3 style="color: #fff; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Nulshock'; font-size: 1rem;">KONTAKT I SLIKE</h3>
+
+                        <div class="form-row" style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label>Grad:</label>
+                                <input type="text" id="grad" placeholder="npr. Beograd" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Telefon:</label>
+                                <input type="tel" id="telefon" placeholder="06..." required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Slike (Max 3):</label>
+                            <div style="border: 2px dashed #333; padding: 20px; text-align: center; border-radius: 8px; background: rgba(255,255,255,0.02);">
+                                <i class="fas fa-images" style="font-size: 1.5rem; color: var(--accent); margin-bottom: 10px;"></i>
+                                <input type="file" id="slike" accept="image/*" multiple style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <div class="nav-buttons" style="display: flex; gap: 10px;">
+                            <button type="button" class="prev-step-btn" onclick="window.nextPrev(-1)" style="flex: 1;">NAZAD</button>
+                            <button type="submit" class="submit-btn-glow" style="flex: 2;">POSTAVI OGLAS <i class="fas fa-check"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <a href="#" class="logo-container footer-brand-fix">
+                    <img src="assets/img/neon-logo1.png" alt="GeekBit Logo" class="logo-img">
+                    <span class="service-name">MARKETPLACE</span>
+                </a>
+                <p style="margin-top: 20px;">
+                    Prvi pravi marketplace za hardver entuzijaste. 
+                    Kupuj sigurno, prodaj brzo, upgrade-uj pametno.
+                </p>
+            </div>
+            
+            <div class="footer-section links">
+                <h3>Navigacija</h3>
+                <ul>
+                    <li><a href="index.html">Početna</a></li>
+                    <li><a href="komponente.html">Berza</a></li>
+                    <li><a href="quicksell.html">Instant Otkup</a></li>
+                    <li><a href="#contact">Postavi Oglas</a></li>
+                </ul>
+            </div>
+    
+            <div class="footer-section social">
+                <h3>Zapratite nas</h3>
+                <p>Budite u toku sa najnovijim dropovima i popustima.</p>
+                <div class="social-icons">
+              <a href="https://www.instagram.com/geekbit.tech/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.tiktok.com/@geekbit.tech" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://discord.gg/Ra7fcJZw3m" target="_blank"><i class="fab fa-discord"></i></a>
+    <a href="https://www.youtube.com/@GeekBit1811" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    
+    <div class="footer-bottom" style="padding-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
+            <a href="uslovi.pdf" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">Uslovi Korišćenja</a>
+            <span style="color: #444;">|</span>
+            <a href="privatnost.pdf" target="_blank" rel="noopener noreferrer" style="color: #888; text-decoration: none; margin: 0 15px; font-size: 0.9rem; transition: color 0.3s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='#888'">Politika Privatnosti</a>
+        </div>
+        &copy; 2026 GeekBit Marketplace
+    </div>
+    </footer>
+
+    <div id="image-modal" class="modal" style="display: none;">
+        <span class="close-modal" onclick="zatvoriGaleriju()">&times;</span>
+        <div class="modal-gallery-wrapper">
+            <img id="modal-img" src="" onclick="event.stopPropagation()">
+            <div class="modal-controls">
+                <button class="gallery-arrow" onclick="promeniSliku(-1); event.stopPropagation();">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div id="modal-caption">Opis slike</div>
+                <button class="gallery-arrow" onclick="promeniSliku(1); event.stopPropagation();">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-modal" class="modal" style="display: none;">
+        <div class="contact-modal-content">
+            <span class="close-contact" onclick="zatvoriKontakt()">&times;</span>
+            <h2 style="font-family: 'Nulshock'; margin-bottom: 20px;">KONTAKT</h2>
+            
+            <div class="contact-info-row">
+                <i class="fas fa-user"></i>
+                <div class="info-text">
+                    <small>Prodavac</small>
+                    <span id="modal-seller-name" style="font-weight: bold; color: #fff;"></span>
+                </div>
+            </div>
+
+            <div class="contact-info-row" id="email-row"> <i class="fas fa-envelope"></i>
+                <div class="info-text">
+                    <small>Email</small>
+                    <a id="modal-seller-email" href="#"></a>
+                </div>
+            </div>
+
+            <div class="contact-info-row">
+                <i class="fas fa-phone"></i>
+                <div class="info-text">
+                    <small>Telefon</small>
+                    <a id="modal-seller-phone" href="#"></a>
+                </div>
+            </div>
+
+            <button class="modal-close-btn" onclick="zatvoriKontakt()" style="margin-top: 20px;">ZATVORI</button>
+        </div>
+    </div>
+
+    <div id="premium-modal" class="modal" style="display: none;">
+        <div class="contact-modal-content" style="border-color: var(--accent); text-align: center; max-width: 500px; padding: 30px;">
+            <span class="close-modal" onclick="document.getElementById('premium-modal').style.display='none'">&times;</span>
+            
+            <i class="fas fa-heart" style="font-size: 3rem; color: var(--accent); margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0,255,136,0.5));"></i>
+            <h2 style="font-family:'Nulshock'; color:#fff; margin-bottom:15px;">PODRŽI GEEKBIT</h2>
+            
+           <p style="color:#ccc; font-size:0.95rem; line-height:1.6; margin-bottom:20px;">GeekBit je <b>100% besplatan</b> za korišćenje. Nema skrivenih troškova ni provizija.<br><br>Ako ti je platforma pomogla da uspešno prodaš ili kupiš hardver, možeš podržati rad servera i dalji razvoj jednim simboličnim doprinosom. Tvoja podrška održava ovu priču živom! </p>
+
+            <div style="background: #111; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <h4 style="color: gold; margin-bottom: 10px; font-family:'Nulshock'; font-size: 0.9rem;"><i class="fas fa-gem"></i> ŠTA DOBIJAŠ ZA 500+ RSD?</h4>
+                <ul style="text-align: left; color: #aaa; font-size: 0.85rem; padding-left: 20px; list-style-type: square; line-height: 1.5;">
+                    <li>Trajni <b>SUPPORTER 💎</b> bedž na profilu</li>
+                    <li>Svi tvoji oglasi idu na <b>vrh pretrage</b> (Prioritet)</li>
+                    <li>Zlatni okvir oko tvojih oglasa za veći broj klikova</li>
+                </ul>
+            </div>
+
+          <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; border: 1px dashed var(--accent); margin-bottom: 20px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);">
+                <p style="color: #fff; font-weight: bold; margin-bottom: 10px; font-size: 0.9rem; text-transform: uppercase;">Uplata na račun (NBS IPS):</p>
+                <p style="color: gold; font-family: 'Nulshock', sans-serif; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);">
+                    265-0000006725717-20
+                </p>
+                <small style="color: #888; font-size: 0.8rem;">Svrha: Donacija - [Vaše ime na sajtu]</small>
+            </div>
+            
+            <button onclick="document.getElementById('premium-modal').style.display='none'" style="background: transparent; color: #888; border: 1px solid #444; padding: 10px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; transition: 0.3s;" onmouseover="this.style.background='#222'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='#888';">
+                RAZUMEM, NASTAVI BESPLATNO
+            </button>
+        </div>
+    </div>
+
+    <div id="delete-modal" class="modal" style="display: none;">
+        <div class="contact-modal-content" style="border-color: #ff4d4d; text-align: center; max-width: 400px; padding: 30px;">
+            <h2 style="color: #ff4d4d; margin-bottom: 15px; font-family: 'Nulshock';"><i class="fas fa-exclamation-triangle"></i> PAŽNJA</h2>
+            <p style="color: #fff; margin-bottom: 25px;">Da li ste sigurni da želite da obrišete ovaj oglas? Ova akcija je nepovratna!</p>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="konacnoObrisi()" style="flex: 1; background: #ff4d4d; color: #fff; border: none; padding: 12px; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">OBRIŠI</button>
+                <button onclick="zatvoriDeleteModal()" style="flex: 1; background: transparent; color: #888; border: 1px solid #444; padding: 12px; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='#222'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='#888';">ODUSTANI</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="buyer-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <h2 style="color: gold; margin-bottom: 15px;"><i class="fas fa-handshake"></i> Kome ste prodali?</h2>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">Kliknite na kupca sa kojim ste uspešno završili saradnju.</p>
+            
+            <div id="buyer-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
+            </div>
+
+            <button class="btn-contact" style="background: #333; margin-top: 20px; width: 100%; border: none;" onclick="document.getElementById('buyer-modal').style.display='none'">ODUSTANI</button>
+        </div>
+    </div>
+
+    <div id="review-modal" class="modal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 20px 0;">
+        <div style="background: #0a0a0a; margin: auto; padding: 30px; border: 1px solid gold; width: 90%; max-width: 400px; border-radius: 15px; position: relative; box-shadow: 0 0 30px rgba(255, 215, 0, 0.15); text-align: center; font-family: 'Roboto', sans-serif;">
+            
+            <span onclick="document.getElementById('review-modal').style.display='none'" style="color: #fff; float: right; font-size: 28px; cursor: pointer; position: absolute; right: 20px; top: 10px;">&times;</span>
+            
+            <h2 style="color: gold; margin-bottom: 15px; font-family: 'Nulshock', sans-serif;">OCENI PRODAVCA</h2>
+            
+            <div id="star-rating" style="font-size: 2.2rem; color: #444; margin-bottom: 20px; cursor: pointer; display: flex; justify-content: center; gap: 5px;">
+                <i class="fas fa-star star-ikona" onclick="odaberiZvezdicu(1)"></i>
+                <i class="fas fa-star star-ikona" onclick="odaberiZvezdicu(2)"></i>
+                <i class="fas fa-star star-ikona" onclick="odaberiZvezdicu(3)"></i>
+                <i class="fas fa-star star-ikona" onclick="odaberiZvezdicu(4)"></i>
+                <i class="fas fa-star star-ikona" onclick="odaberiZvezdicu(5)"></i>
+            </div>
+
+            <textarea id="review-text" class="fensi-textbox" rows="5" placeholder="Napiši svoje iskustvo... (npr. Brz dogovor, odlična saradnja!)" style="width: 100%; background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 5px; margin-bottom: 15px;"></textarea>
+            
+            <button onclick="posaljiOcenu()" style="width: 100%; padding: 15px; background: gold; color: #000; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem;">
+                POŠALJI OCENU
+            </button>
+        </div>
+    </div>
+
+    <div id="custom-alert-box" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:9999; text-align:center; min-width:320px; padding:30px; background:#1e1e1e; border:2px solid var(--accent); box-shadow:0 0 30px rgba(0,0,0,0.8); border-radius:8px;">
+        <h3 id="alert-title" style="font-family:'Nulshock'; margin-bottom:15px; color:var(--accent); font-size:1.5rem; text-shadow:0 0 10px var(--accent);">PORUKA</h3>
+        <p id="alert-message" style="color:#fff; margin-bottom:25px; font-size:1.1rem; line-height:1.5;"></p>
+        <button onclick="zatvoriAlert()" class="submit-btn" style="background:var(--accent); color:#000; margin:0 auto; width:auto; padding:10px 30px; border: none; font-weight: bold; cursor: pointer; border-radius: 4px;">OK</button>
+    </div>
+
+    <button id="scrollToTopBtn" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/main.js?v=31.0" defer></script>
+</body>
+</html>
