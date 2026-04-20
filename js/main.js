@@ -741,16 +741,15 @@ function napraviKarticu(p) {
         ? 'cursor: pointer; border: 1px solid gold; box-shadow: 0 0 15px rgba(255, 215, 0, 0.15); background: linear-gradient(180deg, rgba(255,215,0,0.08) 0%, rgba(17,17,17,1) 40%); position: relative;' 
         : 'cursor: pointer; position: relative;';
 
-  const verifiedTag = p.verifikovan 
+    const verifiedTag = p.verifikovan 
         ? `<div style="position:absolute; top:10px; right:10px; background:linear-gradient(45deg, #111, #222); color:gold; padding:4px 12px; border-radius:5px; font-size:0.7rem; font-weight:bold; z-index:20; box-shadow: 0 4px 10px rgba(255,215,0,0.2); border: 1px solid gold; text-transform:uppercase;"><i class="fas fa-gem" style="margin-right:4px;"></i> SUPPORTER</div>`
         : '';
 
     return `
     <div class="product-card" onclick="window.location.href='oglas.html?id=${p.id}'" style="${cardStyle}">
         
-        ${verifiedTag}
-
-        <div class="card-image-container">
+        <div class="card-image-container" style="position: relative;">
+            ${verifiedTag} 
             <img src="${p.slika}" loading="lazy" onerror="this.src='assets/img/neon-logo1.png'">
             <div class="category-badge">${kategorija}</div>
             ${p.stanje === 'Novo' ? '<span class="status-badge new">NOVO</span>' : ''}
@@ -763,10 +762,10 @@ function napraviKarticu(p) {
                    <h3 class="card-title" style="margin:0; font-size:0.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:65%;">
                        <a href="oglas.html?id=${p.id}" style="color:inherit; text-decoration:none;">${naslov}</a>
                    </h3>
-                    <div style="display:flex; gap:6px; color:#666; font-size:0.7rem; white-space:nowrap; align-items:center;">
-                        <span title="Broj pregleda"><i class="fas fa-eye"></i> ${p.pregledi || 0}</span>
-                        <span>🕒 ${vreme}</span>
-                    </div>
+                   <div style="display:flex; gap:6px; color:#666; font-size:0.7rem; white-space:nowrap; align-items:center;">
+                       <span title="Broj pregleda"><i class="fas fa-eye"></i> ${p.pregledi || 0}</span>
+                       <span>🕒 ${vreme}</span>
+                   </div>
                 </div>
 
                 <div class="price" style="margin-bottom: 5px;">${p.cena || 0} €</div>
@@ -3823,3 +3822,5 @@ window.zatvoriDeleteModal = function() {
         modal.style.display = "none";
     }
 };
+
+
