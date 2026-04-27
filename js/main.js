@@ -1010,10 +1010,15 @@ window.zavrsiKupovinu = async function() {
         // 2. SPREMI ZAHTEV U BAZU
         const korpaZaSlanje = JSON.parse(localStorage.getItem('geekbit_korpa')) || [];
         
+        // Izračunaj ukupnu cenu
+        const totalPrice = korpaZaSlanje.reduce((sum, item) => sum + (item.cena || 0), 0);
+        
         const { data: savedRequest, error: insertError } = await sb.from('service_requests').insert({
             user_id: kupacId,
-            phone_number: phoneNumber,
+            user_email: user.email,
+            user_phone: phoneNumber,
             items: korpaZaSlanje,
+            total_price: totalPrice,
             status: 'new'
         });
 
