@@ -1007,7 +1007,24 @@ window.zavrsiKupovinu = async function() {
         const user = authData.user;
         const kupacId = user.id;
 
-            prikaziAlert("USPEH", "Zahtev poslat! Zvaćemo vas na: " + phoneNumber);
+        // 2. SPREMI ZAHTEV U BAZU
+        const korpaZaSlanje = JSON.parse(localStorage.getItem('geekbit_korpa')) || [];
+        
+        const { data: savedRequest, error: insertError } = await sb.from('service_requests').insert({
+            user_id: kupacId,
+            phone_number: phoneNumber,
+            items: korpaZaSlanje,
+            status: 'new'
+        });
+
+        if (insertError) {
+            console.error('❌ [SERVICE_INSERT] Greška pri čuvanju zahteva:', insertError);
+            prikaziAlert("GREŠKA", "Greška pri čuvanju zahteva: " + insertError.message);
+            return;
+        }
+
+        console.log('✅ [SERVICE_INSERT] Zahtev uspešno sačuvan sa ID:', savedRequest?.[0]?.id);
+        prikaziAlert("USPEH", "Zahtev poslat! Zvaćemo vas na: " + phoneNumber);
             
         } catch (err) {
             console.error(err);
