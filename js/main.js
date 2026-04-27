@@ -1007,7 +1007,6 @@ window.zavrsiKupovinu = async function() {
         const user = authData.user;
         const kupacId = user.id;
 
-            if(error) throw error;
             prikaziAlert("USPEH", "Zahtev poslat! Zvaćemo vas na: " + phoneNumber);
             
         } catch (err) {
