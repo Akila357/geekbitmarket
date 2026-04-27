@@ -1019,7 +1019,7 @@ window.zavrsiKupovinu = async function() {
             user_phone: phoneNumber,
             items: korpaZaSlanje,
             total_price: totalPrice,
-            status: 'new'
+            status: 'pending'
         });
 
         if (insertError) {
