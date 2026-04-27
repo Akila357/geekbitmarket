@@ -6,6 +6,8 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsI
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+console.log('✅ [INIT] main.js učitan i Supabase inicijalizovan');
+
 // GLOBALNE VARIJABLE
 let odabraniTagoviZaOglas = []; 
 let aktivniFilteri = []; // Za pretragu
@@ -1401,6 +1403,7 @@ window.otvoriGaleriju = function(slike, naslov) {
 // 10. POKRETANJE (INIT) 🚀
 // ==========================================
 document.addEventListener("DOMContentLoaded", async () => {
+    console.log('🚀 [DOM_READY] DOMContentLoaded event fire - DOM je spreman!');
     
     //==========================================
     // FORSIRANJE HERO SEKCIJE (SCROLL NA VRH)
@@ -1441,16 +1444,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
    // 4. Stranice
+    console.log('📍 [PAGE_DETECT] Trenutni URL:', window.location.href);
+    console.log('📍 [PAGE_DETECT] Pathname:', window.location.pathname);
+    
 if(window.location.pathname.includes("korpa.html") && typeof ucitajKorpuStranicu === 'function') {
+    console.log('📄 [PAGE_INIT] Detektovan: korpa.html');
     ucitajKorpuStranicu();
 }
 
 if(window.location.pathname.includes("oglas.html") && typeof ucitajPojedinacniOglas === 'function') {
+        console.log('📄 [PAGE_INIT] Detektovan: oglas.html - Pozivam ucitajPojedinacniOglas()');
         ucitajPojedinacniOglas();
+    } else if(window.location.pathname.includes("oglas.html")) {
+        console.error('❌ [PAGE_INIT] oglas.html detektovan ali ucitajPojedinacniOglas nije dostupna!');
     }
 
 // Izmeni ovaj deo u main.js
     if(window.location.pathname.includes("profil.html") || window.location.pathname.endsWith("/") || window.location.pathname.includes("index.html")) {
+        console.log('📄 [PAGE_INIT] Detektovan: profil.html, index.html ili root');
         if(typeof ucitajMojeOglase === 'function') ucitajMojeOglase();
         ucitajMojeKupovine(); // Sada će se učitati i na početnoj i na profilu!
     }
@@ -3321,35 +3332,51 @@ window.posaljiOcenu = async function() {
 // ==========================================
 
 window.ucitajPojedinacniOglas = async function() {
+    console.log('🔍 [UCITAJ_OGLAS] Počeo ucitajPojedinacniOglas...');
+    
     const urlParams = new URLSearchParams(window.location.search);
     const oglasId = urlParams.get('id');
+    console.log('📌 [ID] Pronađen ID oglasa:', oglasId);
 
     if (!oglasId) {
+        console.error('❌ [ERROR] Nema ID-a u URL-u!');
         window.location.href = "komponente.html"; // Ako nema ID-a, vrati ga na Berzu
         return;
     }
 
+    console.log('🔗 [DATABASE] Počinjem query iz baze...');
 // Povuci oglas iz baze (DODATO premium_do)
     const { data: oglas, error } = await sb.from('listings')
         .select('*, profiles(company_name, is_verified, premium_do)') 
         .eq('id', oglasId)
         .single();
 
-if (error || !oglas) {
+    console.log('📦 [DATABASE_RESPONSE] Data:', oglas);
+    console.log('⚠️ [DATABASE_ERROR]:', error);
+
+    if (error || !oglas) {
+        console.error('❌ [ERROR] Oglas nije pronađen ili DB greška:', error);
         document.getElementById('loading-spinner').innerHTML = "<h2 style='color:red;'>Oglas nije pronađen ili je obrisan.</h2><a href='komponente.html' style='color:#fff;'>Nazad na berzu</a>";
         return;
     }
 
+    console.log('✅ [SUCCESS] Oglas uspešno učitan!');
+    console.log('🎬 [SHOW_CONTENT] Krišim spinner i prikazujem sadržaj...');
 // Sakrij spinner i prikaži content
     document.getElementById('loading-spinner').style.display = 'none';
+    console.log('✓ [DOM] loading-spinner sakriven');
+    
     document.getElementById('single-ad-content').style.display = 'grid';
+    console.log('✓ [DOM] single-ad-content prikazan kao grid');
     
    // 🔥 GEEKBIT SMART VIEWS LOGIKA (Sprečava F5 spam) 🔥
+    console.log('👁️ [VIEWS] Registrujem pregled oglasa...');
     let pregledaniOglasi = JSON.parse(localStorage.getItem('geekbit_pregledi')) || [];
     
     // Ako korisnik NIJE u lokalnoj memoriji zabeležen da je gledao ovaj oglas:
     if (!pregledaniOglasi.includes(oglasId)) {
         const noviBrojPregleda = (oglas.views || 0) + 1; 
+        console.log('📊 [VIEWS] Novi broj pregleda:', noviBrojPregleda);
         
         // Zovemo našu specijalnu VIP funkciju u bazi
         sb.rpc('dodaj_pregled', { row_id: oglasId }).then();
@@ -3361,82 +3388,189 @@ if (error || !oglas) {
         oglas.views = noviBrojPregleda; // Ažuriraj za prikaz na ekranu
     }
 
+    console.log('📝 [FILL_DATA] Počinjem popunjavanje podataka u HTML...');
     // Osnovni podaci
-    document.getElementById('ad-title').innerText = oglas.title;
-    document.getElementById('ad-price').innerText = oglas.price + " €";
-    document.getElementById('ad-badge').innerText = oglas.category.toUpperCase();
-    document.getElementById('ad-condition').innerText = oglas.condition;
-    document.getElementById('ad-description').innerText = oglas.description;
+    try {
+        const titleElem = document.getElementById('ad-title');
+        console.log('🔹 [ad-title] Element:', titleElem);
+        titleElem.innerText = oglas.title;
+        console.log('✓ Naslov:', oglas.title);
+        
+        const priceElem = document.getElementById('ad-price');
+        console.log('🔹 [ad-price] Element:', priceElem);
+        priceElem.innerText = oglas.price + " €";
+        console.log('✓ Cena:', oglas.price);
+        
+        const badgeElem = document.getElementById('ad-badge');
+        console.log('🔹 [ad-badge] Element:', badgeElem);
+        badgeElem.innerText = oglas.category.toUpperCase();
+        console.log('✓ Kategorija:', oglas.category);
+        
+        const conditionElem = document.getElementById('ad-condition');
+        console.log('🔹 [ad-condition] Element:', conditionElem);
+        conditionElem.innerText = oglas.condition;
+        console.log('✓ Stanje:', oglas.condition);
+        
+        const descElem = document.getElementById('ad-description');
+        console.log('🔹 [ad-description] Element:', descElem);
+        descElem.innerText = oglas.description;
+        console.log('✓ Opis postavljan');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri popunjavanju osnovnih podataka:', e);
+    }
 
+    console.log('👤 [SELLER] Obrada podataka prodavca...');
     // Prodavac i provera verifikacije (🔥 ZAMENI OVE TRI LINIJE)
     const premiumDo = oglas.profiles?.premium_do ? new Date(oglas.profiles.premium_do) : null;
     const isVerified = premiumDo && premiumDo > new Date();
     const prodavacIme = oglas.profiles?.company_name || oglas.seller_name;
     
+    console.log('⭐ [SELLER_INFO] Premium do:', premiumDo);
+    console.log('⭐ [SELLER_INFO] Is verified:', isVerified);
+    console.log('⭐ [SELLER_INFO] Ime prodavca:', prodavacIme);
+    
     // Upisujemo ime i zlatnu kvačicu ako je verified
- document.getElementById('ad-seller-name').innerHTML = prodavacIme + (isVerified ? ' <i class="fas fa-gem" style="color:gold; font-size:1rem;" title="GeekBit Supporter"></i>' : '');
+    try {
+        const sellerNameElem = document.getElementById('ad-seller-name');
+        console.log('🔹 [ad-seller-name] Element:', sellerNameElem);
+        sellerNameElem.innerHTML = prodavacIme + (isVerified ? ' <i class="fas fa-gem" style="color:gold; font-size:1rem;" title="GeekBit Supporter"></i>' : '');
+        console.log('✓ Ime prodavca postavljeno');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri postavljanju imena prodavca:', e);
+    }
     
     // Farbanje čovečuljka i ivice kutije
     const sellerIcon = document.getElementById('ad-seller-icon');
     const sellerBox = document.getElementById('seller-box');
+    console.log('🔹 [ad-seller-icon] Element:', sellerIcon);
+    console.log('🔹 [seller-box] Element:', sellerBox);
     
     if (isVerified) {
-        if(sellerIcon) sellerIcon.style.color = "gold";
-        if(sellerBox) sellerBox.style.borderLeft = "4px solid gold";
+        if(sellerIcon) {
+            sellerIcon.style.color = "gold";
+            console.log('✓ Ikonika prodavca: GOLD');
+        }
+        if(sellerBox) {
+            sellerBox.style.borderLeft = "4px solid gold";
+            console.log('✓ Kutija prodavca: GOLD ivica');
+        }
     } else {
-        if(sellerIcon) sellerIcon.style.color = "var(--accent)";
-        if(sellerBox) sellerBox.style.borderLeft = "4px solid var(--accent)";
+        if(sellerIcon) {
+            sellerIcon.style.color = "var(--accent)";
+            console.log('✓ Ikonika prodavca: ZELENA');
+        }
+        if(sellerBox) {
+            sellerBox.style.borderLeft = "4px solid var(--accent)";
+            console.log('✓ Kutija prodavca: ZELENA ivica');
+        }
     }
 
     // Klik na prodavca
-    document.getElementById('seller-box').onclick = function() {
-        sessionStorage.setItem('open_seller', JSON.stringify({
-            prodavacId: oglas.user_id, ime: prodavacIme, email: oglas.user_email, telefon: oglas.phone
-        }));
-        window.location.href = 'komponente.html';
-    };
+    try {
+        document.getElementById('seller-box').onclick = function() {
+            sessionStorage.setItem('open_seller', JSON.stringify({
+                prodavacId: oglas.user_id, ime: prodavacIme, email: oglas.user_email, telefon: oglas.phone
+            }));
+            window.location.href = 'komponente.html';
+        };
+        console.log('✓ Click listener na prodavca postavljen');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri postavljanju click listenera na prodavca:', e);
+    }
 
+    console.log('🖼️ [GALLERY] Obrada slike i galerije...');
     // Slike i Galerija (POPRAVLJENO: Definisano samo jednom!)
     const images = (oglas.images && oglas.images.length > 0) ? oglas.images : ['assets/img/neon-logo1.png'];
+    console.log('📸 [GALLERY] Broj slika:', images.length);
+    console.log('📸 [GALLERY] Slike:', images);
     
     // 🔥 SEO DEO: Podaci se upisuju u Head 
-    if (typeof postaviSEO === 'function') {
-        const kratakOpis = `${oglas.price} € | Stanje: ${oglas.condition} | Prodavac: ${prodavacIme}`;
-        postaviSEO(oglas.title, kratakOpis, images[0]);
+    try {
+        if (typeof postaviSEO === 'function') {
+            const kratakOpis = `${oglas.price} € | Stanje: ${oglas.condition} | Prodavac: ${prodavacIme}`;
+            postaviSEO(oglas.title, kratakOpis, images[0]);
+            console.log('✓ SEO funkcija pozvana');
+        } else {
+            console.warn('⚠️ postaviSEO funkcija nije dostupna');
+        }
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri pozivu SEO funkcije:', e);
     }
 
-const mainImg = document.getElementById('main-ad-image');
-    mainImg.src = images[0];
-    
-    // 🔥 POPRAVLJEN DEO: Direktno vezivanje funkcije (bez pucanja stringova)
-    mainImg.onclick = function(e) {
-        e.stopPropagation(); // Sprečava bilo kakve konflikte
-        window.otvoriGaleriju(images, oglas.title);
-    };
-    mainImg.style.cursor = 'zoom-in'; // Kursor se pretvara u lupicu da kupac zna da može da uveća
-
-    const thumbContainer = document.getElementById('ad-thumbnails');
-    if (images.length > 1) {
-        thumbContainer.innerHTML = images.map((img, index) => `
-            <img src="${img}" class="thumbnail-img ${index === 0 ? 'active' : ''}" 
-                 onclick="document.getElementById('main-ad-image').src='${img}'; 
-                          document.querySelectorAll('.thumbnail-img').forEach(el=>el.classList.remove('active')); 
-                          this.classList.add('active');">
-        `).join('');
+    try {
+        const mainImg = document.getElementById('main-ad-image');
+        console.log('🔹 [main-ad-image] Element:', mainImg);
+        mainImg.src = images[0];
+        console.log('✓ Glavna slika postavljena:', images[0]);
+        
+        // 🔥 POPRAVLJEN DEO: Direktno vezivanje funkcije (bez pucanja stringova)
+        mainImg.onclick = function(e) {
+            console.log('🖱️ [CLICK] Kliknuo si na glavnu sliku');
+            e.stopPropagation(); // Sprečava bilo kakve konflikte
+            if (typeof window.otvoriGaleriju === 'function') {
+                window.otvoriGaleriju(images, oglas.title);
+                console.log('✓ Galerija otvorena');
+            } else {
+                console.error('❌ otvoriGaleriju funkcija nije dostupna');
+            }
+        };
+        mainImg.style.cursor = 'zoom-in'; // Kursor se pretvara u lupicu da kupac zna da može da uveća
+        console.log('✓ Click listener na sliku postavljen');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri postavljanju glavne slike:', e);
     }
 
+    try {
+        const thumbContainer = document.getElementById('ad-thumbnails');
+        console.log('🔹 [ad-thumbnails] Element:', thumbContainer);
+        if (images.length > 1) {
+            thumbContainer.innerHTML = images.map((img, index) => `
+                <img src="${img}" class="thumbnail-img ${index === 0 ? 'active' : ''}" 
+                     onclick="document.getElementById('main-ad-image').src='${img}'; 
+                              document.querySelectorAll('.thumbnail-img').forEach(el=>el.classList.remove('active')); 
+                              this.classList.add('active');">
+            `).join('');
+            console.log('✓ Thumbnail-i postavljeni, broj:', images.length - 1);
+        } else {
+            console.log('ℹ️ Samo jedna slika, bez thumbnails');
+        }
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri postavljanju thumbnails:', e);
+    }
+
+    console.log('🔘 [BUTTONS] Vezujem dugmiće...');
     // Vezivanje Dugmića
-    document.getElementById('btn-add-cart').onclick = function() {
-        dodajUKorpu(oglas.id, oglas.title, oglas.price, images[0], prodavacIme, oglas.phone, oglas.user_email, oglas.category, oglas.description);
-    };
+    try {
+        document.getElementById('btn-add-cart').onclick = function() {
+            console.log('🛒 [CLICK] btn-add-cart kliknuto');
+            dodajUKorpu(oglas.id, oglas.title, oglas.price, images[0], prodavacIme, oglas.phone, oglas.user_email, oglas.category, oglas.description);
+        };
+        console.log('✓ btn-add-cart vezano');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri vezivanju btn-add-cart:', e);
+    }
 
-    document.getElementById('btn-handshake').onclick = function(e) {
-        zatraziKupovinu(oglas.id, oglas.title, oglas.user_id, e);
-    };
+    try {
+        document.getElementById('btn-handshake').onclick = function(e) {
+            console.log('🤝 [CLICK] btn-handshake kliknuto');
+            zatraziKupovinu(oglas.id, oglas.title, oglas.user_id, e);
+        };
+        console.log('✓ btn-handshake vezano');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri vezivanju btn-handshake:', e);
+    }
 
-    document.getElementById('btn-contact').onclick = function() {
-        otvoriKontaktModal(prodavacIme, oglas.user_email, oglas.phone);
-    };
+    try {
+        document.getElementById('btn-contact').onclick = function() {
+            console.log('✉️ [CLICK] btn-contact kliknuto');
+            otvoriKontaktModal(prodavacIme, oglas.user_email, oglas.phone);
+        };
+        console.log('✓ btn-contact vezano');
+    } catch (e) {
+        console.error('❌ [ERROR] Greška pri vezivanju btn-contact:', e);
+    }
+    
+    console.log('✅ [COMPLETE] ucitajPojedinacniOglas završena uspešno!');
 }
 
 
