@@ -3747,20 +3747,6 @@ window.addEventListener('load', function() {
 });
 
 
-// ==========================================
-// 📱 PWA SERVICE WORKER REGISTRACIJA
-// ==========================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
-        console.log('Service Worker registrovan sa opsegom:', registration.scope);
-      })
-      .catch((error) => {
-        console.log('Service Worker registracija nije uspela:', error);
-      });
-  });
-}
 
 // ==========================================
 // 🧹 FUNKCIJA ZA TOTALNI RESET FILTERA
