@@ -1,8 +1,8 @@
 // ==========================================
 // 1. SUPABASE KONFIGURACIJA ⚡
 // ==========================================
-const SUPABASE_URL = 'https://wvwlzlnjeioatovqcqmq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2d2x6bG5qZWlvYXRvdnFjcW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2NzY3NjcsImV4cCI6MjA4NjI1Mjc2N30.DI2StHn6AxOy3dQ1GmLByf9bR7SeW_Fq1wprQgnOtus';
+const SUPABASE_URL = 'https://supabase.ajvn.org';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc2MTAxNzk5LCJleHAiOjE5MzM3ODE3OTl9.32MDyo-v4htD55ElEXGXzxUovpAIopRRheOH3BwGQnQ';
 
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
