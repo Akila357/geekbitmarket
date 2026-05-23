@@ -46,7 +46,6 @@
     }
 
     /* 2. POČETNO STANJE ELEMENTA (Dok traje preloader) */
-    .hero-content .status-badge-hero,
     .hero-content .hero-title,
     .hero-content .hero-subtitle,
     .hero-content .hero-buttons,
@@ -61,34 +60,28 @@
     /* 3. KADA SE SAJT UČITA (Kaskadno "Waterfall" isplivavanje) */
     /* Tvoj main.js već dodaje klasu 'loaded' na body kada se preloader završi. Mi to koristimo kao okidač! */
     
-    body.loaded .hero-content .status-badge-hero { 
+    body.loaded .hero-content .hero-title { 
         opacity: 1; 
         transform: translateY(0); 
         transition-delay: 0.1s; 
     }
     
-    body.loaded .hero-content .hero-title { 
+    body.loaded .hero-content .hero-subtitle { 
         opacity: 1; 
         transform: translateY(0); 
         transition-delay: 0.3s; 
     }
     
-    body.loaded .hero-content .hero-subtitle { 
+    body.loaded .hero-content .hero-buttons { 
         opacity: 1; 
         transform: translateY(0); 
         transition-delay: 0.5s; 
     }
     
-    body.loaded .hero-content .hero-buttons { 
-        opacity: 1; 
-        transform: translateY(0); 
-        transition-delay: 0.7s; 
-    }
-    
     body.loaded .hero-content .hero-stats-container { 
         opacity: 1; 
         transform: translateY(0); 
-        transition-delay: 0.9s; 
+        transition-delay: 0.7s; 
     }
 </style>
 </head>
@@ -173,10 +166,6 @@
             <div class="hardware-orbs" id="hardware-orbs"></div> 
         </div>
         <div class="hero-content">
-            <div class="status-badge-hero">
-                <span class="pulse-dot"></span> AKTIVNO 24/7
-            </div>
-
             <h1 class="hero-title">
                 UPGRADE <br> <span class="neon-text">YOUR GEAR</span>
             </h1>
